@@ -63,13 +63,14 @@ header{
 
 .search-bar form{
     transform: scale(0);
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     position: fixed;
     top: 6rem;
     left: 1rem;
     transition: 0.3s;
+    width: 90vw;
 }
 
 .search-bar form input{
@@ -273,7 +274,7 @@ input, textarea, .btn{
     font-size: 1.25rem;
     justify-self: center;
     transition: 0.3s;
-    width: 9rem;
+    width: 8.1rem;
     margin: .25rem .5rem;
     align-self: flex-end;
     background-color: #8e9db0;
