@@ -1,0 +1,109 @@
+@media screen and (min-width: 855px) {
+
+    body{
+        overflow-x: hidden;
+    }
+    
+    header{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #mobile-menu, #mobile-menu-toggle, #search-bar-icon, #search-toggle{
+        visibility: hidden;
+    }
+
+    nav ul{
+        list-style: none;
+        padding: .5rem;
+        position: static;
+        transform: scale(1) translate(0, 0);
+        transition: 0.3s;
+        display: flex;
+        justify-content: flex-start;
+        grid-area: nav;
+        width: 100vw;
+        margin: .4rem 0 0 -1rem;
+        border-radius: 0;
+        transition: 0s;
+    }
+    
+    nav ul li:first-of-type{
+        margin-left: 1rem;
+    }
+    
+    .logo-search{
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        width: 100%;
+        align-items: center;
+    }
+
+
+    .search-bar form{
+        transform: scale(1);
+        position: static;
+        display: flex;
+        justify-content: flex-start;
+        margin: 0 2rem;
+    }
+
+    .search-bar form input, .search-bar form button{
+        box-shadow: none;
+    }
+
+    .logo{
+    }
+
+    .logo h1{
+        font-size: 1.5rem;
+        visibility: visible;
+    }
+  
+    main{
+        padding: 5rem;
+    }
+
+
+/* * * * * * * * * * PRODUCT CARDS * * * * * * * * * * */
+.grid{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.card{
+    margin: 1rem;
+}
+
+/* * * * * * * * * * PRODUCT DETAILS * * * * * * * * * * */
+.main-details{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 2rem;
+    justify-self: center;
+    max-width: 900px;
+}
+
+.details-img{
+    max-width: 20rem;
+}
+
+.main-details .details-btn{
+margin: 0;
+}
+
+
+.checkout-btns{
+    display: grid;
+    margin-top: 3rem;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+}
+
+/*DON'T DELETE THIS! IT CLOSES THE MEDIA QUERY*/
+}
+   

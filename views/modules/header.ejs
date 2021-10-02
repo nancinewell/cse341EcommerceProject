@@ -1,0 +1,41 @@
+<header>
+    <div class="logo-search">
+        <div class="logo">
+            <img class="logo-img" src="<% if (path.includes('admin')){ %>
+                ../images/logo.png
+                <% } else { %>
+                    images/logo.png
+                    <% } %>
+                ">
+            <h1>Munchkin Madness</h1>
+        </div>
+        <div class="search-bar">
+            <div id="search-bar-icon">
+                <div id="circle"></div>
+                <div id="handle"></div>
+            </div>
+            <input type="checkbox" id="search-toggle">
+            <form action="/search" method="post">
+                <input type="text" name="search" id="search">
+                <button type="submit" class="btn">Search</button>
+            </form>
+        </div>
+    </div>
+    <nav>
+        <div id="mobile-menu">
+            <div id="mobile-menu-top"></div>
+            <div id="mobile-menu-middle"></div>
+            <div id="mobile-menu-bottom"></div>
+        </div>
+        <input type="checkbox" id="mobile-menu-toggle">
+        <ul>
+            <li><a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a></li>
+            <li><a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>">Cart</a></li>
+            <li><a href="/orders" class="<%= path === '/orders' ? 'active' : '' %>">Orders</a></li>
+            <li><a href="/admin/products" class="<%= path === '/admin/products' ? 'active' : '' %>">Admin Products</a></li>
+            <li><a href="/admin/add-product" class="<%= path === '/admin/add-product' ? 'active' : '' %>">Add Product</a></li>
+        </ul>
+        
+    </nav>
+    
+</header>

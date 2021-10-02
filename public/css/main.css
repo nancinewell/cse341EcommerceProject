@@ -1,5 +1,446 @@
+/* * * * * * * * * * COLORS* * * * * * * * * * 
+Yellow: fad630
+Orange: fb7828
+Red: de2527
+Green: 35a148
+Purple: 964f9e
+Bluish Gray: 6980a3
+Brown: 985624
+Gray: 8e9db0
+Dark Gray: 5c6d7b
+*/
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;400;700&family=Koh+Santepheap&display=swap');
+ 
+/* * * * * * * * * * GENERAL* * * * * * * * * * */
+* {
+    box-sizing: border-box;
+  }
+
+body{
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-rows: 7rem 1fr 3rem;
+    height: 100vh;
+    font-family: 'Mukta', sans-serif;
+    min-width: 340px;
+}
+header, footer{
+    background-color: #8e9db0;
+    padding: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Koh Santepheap', cursive;
+ }
+
+  main{
+     padding: 2rem;
+     justify-self: center;
+ }
+/* * * * * * * * * * HEADER* * * * * * * * * * */
+header{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+ .logo-img {
+    width: 5rem;
+    margin: 0 1rem;
+    border-radius: 10px;
+ }
+ .logo{
+    display: flex;
+    justify-content: flex-start;
+ }
+
+.logo h1{
+    visibility: hidden;
+    font-size: 1.25rem;
+}
+
+
+.search-bar form{
+    transform: scale(0);
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+    position: fixed;
+    top: 6rem;
+    left: 1rem;
+    transition: 0.3s;
+}
+
+.search-bar form input{
+    padding: .25rem .5rem;
+    height: 2.75rem;
+    box-shadow: 5px 5px 15px #000;
+}
+
+.search-bar form button{
+    box-shadow: 5px 5px 15px #000;
+    background-color: #5c6d7b;
+}
+
+#search-bar-icon{
+    position: fixed;
+    background-color: #6980a3;
+    border-radius: 50%;
+    height: 3rem;
+    width: 3rem;
+    position: fixed;
+    top: 2rem;
+    right: 6rem;
+    visibility: visible;
+    padding: 0;
+    text-align: center;
+}
+
+#circle{
+    /*border-radius: 50%;
+    border: 2px solid #fff;
+    height: 1rem;
+    width: 1rem;
+    position: relative;
+    top: 5px;
+    left: 20px;*/
+    font-size: 1em;
+    display: inline-block;
+    width: 1rem;
+    box-sizing: content-box;
+    height: 1rem;
+    border: 2px solid #fff;
+    position: relative;
+    top: .8rem;
+    
+    border-radius: 50%;
+}
+
+#circle:before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: -0.25em;
+    bottom: -0.1em;
+    border-width: 0;
+    background: #fff;
+    width: 0.5rem;
+    height: 0.1em;
+    transform: rotate(45deg);
+  }
+
+#search-toggle{
+    opacity: 0;
+    height: 3rem;
+    width: 3rem;
+    position: fixed;
+    top: 1.75rem;
+    right: 5.75rem;
+    visibility: visible;
+    padding: 0;
+}
+
+#search-toggle:checked ~ form{
+    transform: scale(1);
+}
+/* * * * * * * * * * ERRORS* * * * * * * * * * */
 .error-img{
-    height: 20rem;
-    width: 50 rem;
-    background-image: url('../images/zombie-munchkin-banner.png');
+    margin: auto;
+    width: 100%;
+    max-width: 650px;
+    padding: 0;
+    justify-self: center;
+}
+
+main.error-main{
+    justify-self: center;
+    align-self: center;
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+/* * * * * * * * * * NAV * * * * * * * * * * */
+#mobile-menu-top, #mobile-menu-middle, #mobile-menu-bottom {
+    width: 15px;
+    height: 2px;
+    background-color: #fff;
+}
+
+#mobile-menu-top{
+    margin-top: .75rem;
+}
+#mobile-menu-bottom{
+    margin-bottom: .75rem;
+}
+#mobile-menu{
+    background-color: #6980a3;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+}
+
+#mobile-menu-toggle{
+    opacity: 0;
+    height: 3rem;
+    width: 3rem;
+    position: fixed;
+    top: 1.75rem;
+    right: 1.75rem;
+    visibility: visible;
+    padding: 0;
+}
+
+
+#mobile-menu-toggle:checked ~ ul{
+    transform: scale(1) translate(0, 0);
+}
+
+nav ul{
+    list-style: none;
+    margin: 0 1rem 0 0;
+    padding: .5rem;
+    position: relative;
+    top: 4rem;
+    background-color: #6980a3;
+    transform: scale(0) translate(10rem, 0);
+    transition: 0.3s;
+    border-radius: 15px;
+    z-index: 2;
+}
+
+nav ul li{
+    margin: 0;
+    padding: .5rem 1rem;
+}
+
+nav ul li a{
+    text-decoration: none;
+    color: #fff;
+    transition: 0.3s;
+}
+
+nav ul li a:visited{
+    color: #fff;
+}
+
+nav ul li a:hover{
+    color: #fad630;
+}
+
+nav ul li:hover{
+    transform: scale(1.15);
+    transition: 0.3s;
+}
+
+nav ul li a:active{
+    color: #fad630;
+}
+
+
+/* * * * * * * * * * FORM * * * * * * * * * * */
+fieldset{
+    border-radius: 15px;
+    padding: 1rem;
+    width: 415px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
+input, textarea, .btn{
+    padding: .5rem;
+    border-radius: 10px;
+    width: 250px;
+    border: 1px solid #5c6d7b;
+}
+
+.btn, .details-btn a.btn {
+    text-align: center;
+    text-decoration: none;
+    padding: .25rem;
+    font-family: 'Mukta', sans-serif;
+    font-size: 1.25rem;
+    justify-self: center;
+    transition: 0.3s;
+    width: 9rem;
+    margin: .25rem .5rem;
+    align-self: flex-end;
+    background-color: #8e9db0;
+    color: #fff;
+    border-radius: 10px;
+    border: 1px solid #5c6d7b;
+    
+}
+
+.btn:hover, .details-btn:hover{
+    background-color: #fad630;
+    color: #5c6d7b;
+    font-weight: 700;
+}
+
+textarea{
+    font-family: 'Mukta', sans-serif;
+}
+
+input:focus, textarea:focus{
+    border: 2px solid #35a148;
+}
+
+.form-control{
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    width: 380px;
+}
+
+legend{
+    font-family: 'Koh Santepheap', cursive;
+    font-size: 1.5rem;
+}
+
+/* * * * * * * * * * PRODUCT CARDS * * * * * * * * * * */
+.grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;    
+    grid-gap: 1rem;
+}
+
+.card{
+    width: 100%;
+    max-width: 20rem;
+    border-radius: 15px;
+    margin: auto;
+    box-shadow: 5px 5px 15px #6980a3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "header header"
+                        "pic content"
+                        "btn btn";
+
+}
+
+.card__header{
+    width: 100%;
+    height: 3rem;
+    border-radius: 15px 15px 0 0;
+    background-color: #5c6d7b;
+    grid-area: header;
+    justify-self: center;
+}
+
+.card__header p{
+    margin: 0;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Koh Santepheap', cursive;
+}
+.card__image img{
+    width: 100%;
+    padding: .5rem;
+    grid-area: pic;
+}
+.card__content{
+    padding: .25rem;
+    grid-area: content;
+}
+
+.card__actions{
+    display: flex;
+    grid-gap: .25rem;
+    grid-area: btn;
+    align-items: flex-end;
+}
+
+.card__actions form{
+    margin: 0;
+}
+
+.details-btn{
+    text-decoration: none;
+    font-size: 1rem;
+    text-align: center;
+    
+}
+
+a.details-btn{
+    text-decoration: none;
+    padding: .25rem;
+    padding-left: 2.7rem;
+    padding-right: 2.7rem;
+}
+
+/* * * * * * * * * * CART * * * * * * * * * * */
+.main-cart{
+    justify-self: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    
+    grid-gap: 1rem;
+}
+
+.cart-table{
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.cart-table th{
+    width: 5rem;
+}
+
+.cart-table th:first-of-type{
+    width: 20rem;
+}
+
+.cart-table tr{
+    padding: .5rem .25rem;
+}
+
+.cart-table td{
+    padding: .25rem .25rem .25rem .5rem ;
+}
+
+.cart-total{
+    font-weight: 700;
+    background-color: #fad630;
+}
+
+.cart-total td:first-of-type{
+    border-radius: 10px 0 0 10px;
+}
+
+.cart-total td:last-of-type{
+    border-radius: 0 10px 10px 0;
+}
+
+.delete-btn{
+padding: .25rem;
+border: none;
+background: rgba(0, 0, 0, 0);
+cursor: pointer;
+}
+
+a#checkout-btn{
+    padding: .25rem .5rem;
+    justify-self: end;
+    width: 100%;
+    margin-top: .25rem;
+}
+
+.checkout-btns{
+    display: grid;
+    margin-top: 3rem;
+    grid-template-rows: 3rem 3rem;
+    grid-gap: .25rem;
 }

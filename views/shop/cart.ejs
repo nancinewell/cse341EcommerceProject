@@ -1,0 +1,43 @@
+<%- include('../modules/head.ejs') %>
+    </head>
+
+    <body>
+        <%- include('../modules/header.ejs') %>
+
+        <main class="main-cart">
+
+           <% if(products.length > 0){ %>
+            <h1>Your Cart</h1>
+            <table class="cart-table">
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th></th>
+                <% products.forEach(p => { %> 
+                   <tr> 
+                       <td><%= p.productData.title %></td>
+                       <td> <%= p.qty %></td>
+                       <td> <%= (Math.round(p.productData.price * p.qty * 100) / 100).toFixed(2)%></td>
+                       <td><form action="/cart-delete-item" method="post">
+                            <input type="hidden" value="<%= p.productData.id %>" name="productId">
+                            <button type="submit" class="delete-btn">🗑️</button>
+                        </form></td>
+                    </tr>
+
+                <% }) %> 
+                <tr class="cart-total">
+                    <td>Total Cost</td>
+                    <td></td>
+                    <td><%= (Math.round(cart.totalPrice * 100) / 100).toFixed(2) %></td>
+                </tr>
+            </table>
+            <div class="checkout-btns">
+                <a href='/' class='btn' id='checkout-btn'>Continue Shopping</a>
+                <a href='/checkout' class='btn' id='checkout-btn'>Checkout</a>
+            </div>
+            
+            <% } else { %>
+                <h1>Your Cart is Empty</h1>
+            <% } %> 
+        </main>
+        <%- include('../modules/footer.ejs') %>

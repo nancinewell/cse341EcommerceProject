@@ -1,0 +1,34 @@
+<%- include('../modules/head.ejs'); %>
+</head>
+<body>
+<%- include('../modules/header.ejs'); %>
+<main>
+    <form class="product-form" action=<% if(editing){ %> '/admin/edit-product' <% }else{ %>"/admin/add-product" <% } %>method="POST">
+        <fieldset>
+            <legend>Add A Product</legend>
+            <div class="form-control">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" placeholder="What my game is called" value="<% if(editing){%><%= product.title %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" name="imageUrl" id="imageUrl" placeholder="Where a pic of my game is stored" value="<% if(editing){%><%= product.imageUrl %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="price">Price</label>
+                <input type="number" name="price" id="price" step="0.01" placeholder="How much my game costs" value="<% if(editing){%><%= product.price %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="5" placeholder="What my game is like" ><% if(editing){%><%= product.description %><% } %></textarea>
+            </div>
+            <% if(editing) { %>
+                <input type="hidden" value="<%= product.id %>" name="productId">
+                <% } %>
+            <button class="btn" type="submit"><% if(editing) { %> Update Product <% } else { %> Add Product <% } %></button>
+        </fieldset>
+    </form>
+</main>
+<%- include('../modules/footer.ejs'); %>
+ 
+    
