@@ -1,3 +1,4 @@
+const PORT = process.env.PORT || 3000
 const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -21,4 +22,4 @@ app.use(shopRoutes);
     res.status(404).render('404', { pageTitle: 'Page Not Found', path: '404' });
   });
 
-app.listen(3000);
+app.listen(PORT);

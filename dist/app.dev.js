@@ -1,5 +1,7 @@
 "use strict";
 
+var PORT = process.env.PORT || 3000;
+
 var path = require('path');
 
 var bodyParser = require('body-parser');
@@ -28,4 +30,4 @@ app.use(function (req, res, next) {
     path: '404'
   });
 });
-app.listen(3000);
+app.listen(PORT);
