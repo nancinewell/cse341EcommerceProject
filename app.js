@@ -1,7 +1,7 @@
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 const path = require('path');
 
-const mongoose= require('mongoose');
+const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const User = require('./models/user');
@@ -63,7 +63,7 @@ app.use(shopRoutes);
           }
         });
         user.save(); 
-        app.listen(PORT);
+        app.listen(port);
       }
     })
     .catch(err => {

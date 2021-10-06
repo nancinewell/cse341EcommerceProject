@@ -1,6 +1,6 @@
 "use strict";
 
-var PORT = process.env.PORT || 3000;
+var port = process.env.PORT || 3000;
 
 var path = require('path');
 
@@ -64,7 +64,7 @@ mongoose.connect(MONGODB_URL).then(function (result) {
 
       _user.save();
 
-      app.listen(PORT);
+      app.listen(port);
     }
   })["catch"](function (err) {
     console.log("Error: ".concat(err));
