@@ -42,28 +42,28 @@ app.use((req, res, next) => {
     })
     .catch(err => console.log(`Error: ${err}`));
 });
-console.log`port# ${port}`;
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
   app.use((req, res, next) => {
     res.status(404).render('404', { pageTitle: 'Page Not Found', path: '404' });
   });
-
+  console.log`port# ${port}`;
   mongoose
   .connect(
     MONGODB_URL
   ).then(result => {
-    User.findOne().then(user =>{
-      if(!user){
-        const user = new User({
-          name: 'AdminUser',
-          email: 'admin@email.com',
-          cart: {
-            items: []
-          }
-        });
-        user.save(); 
+    // User.findOne().then(user =>{
+    //   if(!user){
+    //     const user = new User({
+    //       name: 'AdminUser',
+    //       email: 'admin@email.com',
+    //       cart: {
+    //         items: []
+    //       }
+    //     });
+    //     user.save(); 
         app.listen(port, () => {console.log("this app is listening on port# " + port)})
 
       }
