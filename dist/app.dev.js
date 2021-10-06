@@ -55,7 +55,6 @@ app.use(function (req, res, next) {
     return console.log("Error: ".concat(err));
   });
 });
-console.log(_templateObject(), port);
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(function (req, res, next) {
@@ -64,24 +63,22 @@ app.use(function (req, res, next) {
     path: '404'
   });
 });
+console.log(_templateObject(), port);
 mongoose.connect(MONGODB_URL).then(function (result) {
-  User.findOne().then(function (user) {
-    if (!user) {
-      var _user = new User({
-        name: 'AdminUser',
-        email: 'admin@email.com',
-        cart: {
-          items: []
-        }
-      });
-
-      _user.save();
-
-      app.listen(port, function () {
-        console.log("this app is listening on port# " + port);
-      });
-    }
-  })["catch"](function (err) {
-    console.log("Error: ".concat(err));
+  // User.findOne().then(user =>{
+  //   if(!user){
+  //     const user = new User({
+  //       name: 'AdminUser',
+  //       email: 'admin@email.com',
+  //       cart: {
+  //         items: []
+  //       }
+  //     });
+  //     user.save(); 
+  app.listen(port, function () {
+    console.log("this app is listening on port# " + port);
   });
-});
+}) //})
+["catch"](function (err) {
+  console.log("Error: ".concat(err));
+}); //})

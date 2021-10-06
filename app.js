@@ -66,10 +66,10 @@ app.use(shopRoutes);
     //     user.save(); 
         app.listen(port, () => {console.log("this app is listening on port# " + port)})
 
-      }
-    })
+      })
+    //})
     .catch(err => {
     console.log(`Error: ${err}`);
-  })})
+  })//})
 
   
