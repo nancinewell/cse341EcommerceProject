@@ -5,6 +5,7 @@ var express = require('express');
 var shopController = require('../controllers/shop-controller');
 
 var router = express.Router();
+router.get('/orders', shopController.postOrder);
 router.get('/orders', shopController.getOrders);
 router.get('/checkout', shopController.getCheckout);
 router.post('/cart-delete-item', shopController.postCartDeleteProduct);

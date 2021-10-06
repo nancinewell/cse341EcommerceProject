@@ -15,11 +15,11 @@
                 <th></th>
                 <% products.forEach(p => { %> 
                    <tr> 
-                       <td><%= p.productData.title %></td>
-                       <td> <%= p.qty %></td>
-                       <td> <%= (Math.round(p.productData.price * p.qty * 100) / 100).toFixed(2)%></td>
+                       <td><%= p.productId.title %></td>
+                       <td> <%= p.quantity %></td>
+                       <td> <%= (Math.round(p.productId.price * p.quantity * 100) / 100).toFixed(2)%></td>
                        <td><form action="/cart-delete-item" method="post">
-                            <input type="hidden" value="<%= p.productData.id %>" name="productId">
+                            <input type="hidden" value="<%= p.productId.id %>" name="productId">
                             <button type="submit" class="delete-btn">🗑️</button>
                         </form></td>
                     </tr>
@@ -28,7 +28,7 @@
                 <tr class="cart-total">
                     <td>Total Cost</td>
                     <td></td>
-                    <td><%= (Math.round(cart.totalPrice * 100) / 100).toFixed(2) %></td>
+                    <td><%= (Math.round(price * 100) / 100).toFixed(2) %></td>
                 </tr>
             </table>
             <div class="checkout-btns">

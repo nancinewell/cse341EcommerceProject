@@ -4,6 +4,8 @@ const shopController = require('../controllers/shop-controller');
 
 const router = express.Router();
 
+router.get('/orders', shopController.postOrder);
+
 router.get('/orders', shopController.getOrders);
 
 router.get('/checkout', shopController.getCheckout);
