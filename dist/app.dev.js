@@ -1,5 +1,17 @@
 "use strict";
 
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["port# ", ""]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
 var port = process.env.PORT || 5000;
 
 var path = require('path');
@@ -23,6 +35,7 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 var MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
+console.log(_templateObject(), port);
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 

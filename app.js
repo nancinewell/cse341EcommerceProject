@@ -20,6 +20,7 @@ app.use(cors(corsOptions));
 
 const MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
 
+console.log`port# ${port}`;
 
 
 
