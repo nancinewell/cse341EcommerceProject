@@ -1,4 +1,4 @@
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const path = require('path');
 
 const mongoose = require('mongoose');
@@ -63,7 +63,8 @@ app.use(shopRoutes);
           }
         });
         user.save(); 
-        app.listen(port);
+        app.listen(port, () => {console.log("this app is listening on port# " + port)})
+
       }
     })
     .catch(err => {
