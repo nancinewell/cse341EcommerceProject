@@ -63,7 +63,7 @@ app.use(shopRoutes);
           }
         });
         user.save(); 
-        app.listen({PORT});
+        app.listen(PORT);
       }
     })
     .catch(err => {

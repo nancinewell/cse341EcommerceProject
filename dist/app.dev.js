@@ -64,9 +64,7 @@ mongoose.connect(MONGODB_URL).then(function (result) {
 
       _user.save();
 
-      app.listen({
-        PORT: PORT
-      });
+      app.listen(PORT);
     }
   })["catch"](function (err) {
     console.log("Error: ".concat(err));
