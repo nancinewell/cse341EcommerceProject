@@ -35,7 +35,6 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 var MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
-console.log(_templateObject(), port);
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -56,6 +55,7 @@ app.use(function (req, res, next) {
     return console.log("Error: ".concat(err));
   });
 });
+console.log(_templateObject(), port);
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(function (req, res, next) {
