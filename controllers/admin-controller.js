@@ -24,13 +24,12 @@ exports.getProducts = (req, res, next) => {
     });
   };
 
-  // * * * * * * * * * * * * * * ADD PRODUCTS * * * * * * * * * * * * * *
+  // * * * * * * * * * * * * * * POST ADD PRODUCT * * * * * * * * * * * * * *
   exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    console.log(req.user);
     const product = new Product({
       title: title, 
       price: price, 
@@ -48,6 +47,34 @@ exports.getProducts = (req, res, next) => {
         console.log(err);
       });
     };
+
+// * * * * * * * * * * * * * * POST ADD ANOTHER PRODUCT * * * * * * * * * * * * * *
+exports.postAddAnotherProduct = (req, res, next) => {
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const price = req.body.price;
+  const description = req.body.description;
+  const product = new Product({
+    title: title, 
+    price: price, 
+    description: description, 
+    imageUrl: imageUrl,
+    userId: req.user._id // Mongoose will simply pick out the id from the user. Or you can specify: req.user._id 
+  });
+  //.save() is native to mongoose
+  product.save()
+    .then(result => {
+      console.log('Created Product');
+      res.render('admin/edit-product', {
+        pageTitle: 'Add Product',
+        path: '/admin/add-product',
+        editing: false
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  };
 
     // * * * * * * * * * * * * * * GET EDIT PRODUCT * * * * * * * * * * * * * *
   exports.getEditProduct = (req, res, next) => {

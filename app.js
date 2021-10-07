@@ -5,10 +5,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const User = require('./models/user');
+const cors = require('cors') 
 const app = express();
-
-
-const cors = require('cors') // Place this with other requires (like 'path' and 'express')
 
 const corsOptions = {
     origin: "https://newell-ecommerce.herokuapp.com/",
@@ -16,14 +14,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-
-
 const MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
-
-
-
-
-
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -37,7 +28,6 @@ app.use((req, res, next) => {
   User.findById("615cbf31533eac08ff42b06f")
     .then(user => {
       req.user = user;
-      console.log(user);
       next();
     })
     .catch(err => console.log(`Error: ${err}`));
@@ -49,7 +39,7 @@ app.use(shopRoutes);
   app.use((req, res, next) => {
     res.status(404).render('404', { pageTitle: 'Page Not Found', path: '404' });
   });
-  console.log`port# ${port}`;
+  
   mongoose
   .connect(
     MONGODB_URL
@@ -64,7 +54,7 @@ app.use(shopRoutes);
     //       }
     //     });
     //     user.save(); 
-        app.listen(port, () => {console.log("this app is listening on port# " + port)})
+        app.listen(port);
 
       })
     //})

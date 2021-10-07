@@ -1,17 +1,5 @@
 "use strict";
 
-function _templateObject() {
-  var data = _taggedTemplateLiteral(["port# ", ""]);
-
-  _templateObject = function _templateObject() {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
 var port = process.env.PORT || 5000;
 
 var path = require('path');
@@ -24,11 +12,9 @@ var bodyParser = require('body-parser');
 
 var User = require('./models/user');
 
+var cors = require('cors');
+
 var app = express();
-
-var cors = require('cors'); // Place this with other requires (like 'path' and 'express')
-
-
 var corsOptions = {
   origin: "https://newell-ecommerce.herokuapp.com/",
   optionsSuccessStatus: 200
@@ -49,7 +35,6 @@ app.use(bodyParser.urlencoded({
 app.use(function (req, res, next) {
   User.findById("615cbf31533eac08ff42b06f").then(function (user) {
     req.user = user;
-    console.log(user);
     next();
   })["catch"](function (err) {
     return console.log("Error: ".concat(err));
@@ -63,7 +48,6 @@ app.use(function (req, res, next) {
     path: '404'
   });
 });
-console.log(_templateObject(), port);
 mongoose.connect(MONGODB_URL).then(function (result) {
   // User.findOne().then(user =>{
   //   if(!user){
@@ -75,9 +59,7 @@ mongoose.connect(MONGODB_URL).then(function (result) {
   //       }
   //     });
   //     user.save(); 
-  app.listen(port, function () {
-    console.log("this app is listening on port# " + port);
-  });
+  app.listen(port);
 }) //})
 ["catch"](function (err) {
   console.log("Error: ".concat(err));

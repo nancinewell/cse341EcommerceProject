@@ -37,7 +37,6 @@ exports.getCart = (req, res, next) => {
     .then(user => {
       const products = user.cart.items;
       const price = user.cart.totalPrice;
-      console.log`products: ${products}`;
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
@@ -56,7 +55,6 @@ exports.getCart = (req, res, next) => {
         return req.user.addToCart(product);
       })
       .then(result => {
-        console.log(`postCart result: ${result}`);
         res.redirect('/cart');
       });
   };
@@ -64,8 +62,10 @@ exports.getCart = (req, res, next) => {
 // * * * * * * * * * * * * * * POST CART DELETE PRODUCT * * * * * * * * * * * * * *
   exports.postCartDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
+    const qty = req.body.quantity;
+    const price = req.body.price;
     req.user
-      .removeFromCart(prodId)
+      .removeFromCart(prodId, qty, price)
       .then(result => {
         res.redirect('/cart');
       })

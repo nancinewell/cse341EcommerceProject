@@ -24,7 +24,7 @@ exports.getAddProduct = function (req, res, next) {
     path: '/admin/add-product',
     editing: false
   });
-}; // * * * * * * * * * * * * * * ADD PRODUCTS * * * * * * * * * * * * * *
+}; // * * * * * * * * * * * * * * POST ADD PRODUCT * * * * * * * * * * * * * *
 
 
 exports.postAddProduct = function (req, res, next) {
@@ -32,7 +32,6 @@ exports.postAddProduct = function (req, res, next) {
   var imageUrl = req.body.imageUrl;
   var price = req.body.price;
   var description = req.body.description;
-  console.log(req.user);
   var product = new Product({
     title: title,
     price: price,
@@ -45,6 +44,33 @@ exports.postAddProduct = function (req, res, next) {
   product.save().then(function (result) {
     console.log('Created Product');
     res.redirect('/admin/products');
+  })["catch"](function (err) {
+    console.log(err);
+  });
+}; // * * * * * * * * * * * * * * POST ADD ANOTHER PRODUCT * * * * * * * * * * * * * *
+
+
+exports.postAddAnotherProduct = function (req, res, next) {
+  var title = req.body.title;
+  var imageUrl = req.body.imageUrl;
+  var price = req.body.price;
+  var description = req.body.description;
+  var product = new Product({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl: imageUrl,
+    userId: req.user._id // Mongoose will simply pick out the id from the user. Or you can specify: req.user._id 
+
+  }); //.save() is native to mongoose
+
+  product.save().then(function (result) {
+    console.log('Created Product');
+    res.render('admin/edit-product', {
+      pageTitle: 'Add Product',
+      path: '/admin/add-product',
+      editing: false
+    });
   })["catch"](function (err) {
     console.log(err);
   });

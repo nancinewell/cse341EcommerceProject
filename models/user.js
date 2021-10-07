@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+const Product = require('../models/product');
+
 const userSchema = new Schema({
   name: {
     type: String,
@@ -63,16 +65,28 @@ userSchema.methods.addToCart = function(product) {
   return this.save();
 };
 
-userSchema.methods.removeFromCart = function(productId) {
-        const updatedCartItems = this.cart.items.filter(item => {
-          return item.productId.toString() !== productId.toString();
-        });
-        this.cart.items = updatedCartItems;
-        return this.save();
-      }
+userSchema.methods.removeFromCart = function(productId, qty, price) {
+  //we have quantity and price of product being removed fed by the parameters
+
+  //remove product(s) from cart
+  const updatedCartItems = this.cart.items.filter(item => {
+    return item.productId.toString() !== productId.toString();
+  });
+  
+  //calculate price
+  let beginingPrice = this.cart.totalPrice;
+  let totalProductPrice = price * qty;
+  let newTotalPrice = beginingPrice-totalProductPrice;
+  
+  //update cart
+  this.cart = {items: updatedCartItems, totalPrice: newTotalPrice};
+  
+  //this.cart.items = updatedCartItems;
+  return this.save();
+}
 
 userSchema.methods.clearCart = function(){
-    this.cart = {items: []};
+    this.cart = {items: [], totalPrice: 0};
     return this.save();
 };
 

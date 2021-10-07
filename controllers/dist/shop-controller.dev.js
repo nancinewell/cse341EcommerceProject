@@ -6,18 +6,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _templateObject() {
-  var data = _taggedTemplateLiteral(["products: ", ""]);
-
-  _templateObject = function _templateObject() {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
 var Product = require('../models/product');
 
 var Cart = require('../models/cart'); // * * * * * * * * * * * * * * GET INDEX * * * * * * * * * * * * * *
@@ -54,7 +42,6 @@ exports.getCart = function (req, res, next) {
   req.user.populate('cart.items.productId').then(function (user) {
     var products = user.cart.items;
     var price = user.cart.totalPrice;
-    console.log(_templateObject(), products);
     res.render('shop/cart', {
       path: '/cart',
       pageTitle: 'Your Cart',
@@ -72,7 +59,6 @@ exports.postCart = function (req, res, next) {
   Product.findById(prodId).then(function (product) {
     return req.user.addToCart(product);
   }).then(function (result) {
-    console.log("postCart result: ".concat(result));
     res.redirect('/cart');
   });
 }; // * * * * * * * * * * * * * * POST CART DELETE PRODUCT * * * * * * * * * * * * * *
@@ -80,7 +66,9 @@ exports.postCart = function (req, res, next) {
 
 exports.postCartDeleteProduct = function (req, res, next) {
   var prodId = req.body.productId;
-  req.user.removeFromCart(prodId).then(function (result) {
+  var qty = req.body.quantity;
+  var price = req.body.price;
+  req.user.removeFromCart(prodId, qty, price).then(function (result) {
     res.redirect('/cart');
   })["catch"](function (err) {
     return console.log(err);

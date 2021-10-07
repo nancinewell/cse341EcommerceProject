@@ -11,6 +11,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
+
+var Product = require('../models/product');
+
 var userSchema = new Schema({
   name: {
     type: String,
@@ -73,17 +76,29 @@ userSchema.methods.addToCart = function (product) {
   return this.save();
 };
 
-userSchema.methods.removeFromCart = function (productId) {
+userSchema.methods.removeFromCart = function (productId, qty, price) {
+  //we have quantity and price of product being removed fed by the parameters
+  //remove product(s) from cart
   var updatedCartItems = this.cart.items.filter(function (item) {
     return item.productId.toString() !== productId.toString();
-  });
-  this.cart.items = updatedCartItems;
+  }); //calculate price
+
+  var beginingPrice = this.cart.totalPrice;
+  var totalProductPrice = price * qty;
+  var newTotalPrice = beginingPrice - totalProductPrice; //update cart
+
+  this.cart = {
+    items: updatedCartItems,
+    totalPrice: newTotalPrice
+  }; //this.cart.items = updatedCartItems;
+
   return this.save();
 };
 
 userSchema.methods.clearCart = function () {
   this.cart = {
-    items: []
+    items: [],
+    totalPrice: 0
   };
   return this.save();
 };

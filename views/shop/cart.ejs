@@ -20,6 +20,8 @@
                        <td> <%= (Math.round(p.productId.price * p.quantity * 100) / 100).toFixed(2)%></td>
                        <td><form action="/cart-delete-item" method="post">
                             <input type="hidden" value="<%= p.productId.id %>" name="productId">
+                            <input type="hidden" value="<%= p.quantity %>" name="quantity">
+                            <input type="hidden" value="<%= p.productId.price %>" name="price">
                             <button type="submit" class="delete-btn">🗑️</button>
                         </form></td>
                     </tr>

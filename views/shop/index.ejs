@@ -15,7 +15,7 @@
                             alt="<%= product.title %>">
                     </div>
                     <div class="card__content">
-                        <p class="product__price">$<%= product.price %></p>
+                        <p class="product__price">$<%= product.price.toFixed(2) %></p>
                         <p class="product__description"><%= product.description %></p>
                     </div>
                     <div class="card__actions">
