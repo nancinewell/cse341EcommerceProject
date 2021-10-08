@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-const Cart = require('../models/cart');
+const Order = require('../models/orders');
 
 // * * * * * * * * * * * * * * GET INDEX * * * * * * * * * * * * * *
 exports.getIndex = (req, res, next) => {
@@ -30,6 +30,27 @@ exports.getProduct = (req, res, next) => {
     .catch(err => console.log(err));
 };
     
+
+
+
+// * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
+exports.getCheckout = (req, res, next) => {
+  console.log`req.user: ${req.user}`;
+  req.user
+    .populate('cart.items.productId')
+    .then(user => {
+      const products = user.cart.items;
+      const price = user.cart.totalPrice;
+      res.render('shop/checkout', {
+        path: '/checkout',
+        pageTitle: 'Checkout',
+        products: products,
+        price: price
+      });
+    })
+    .catch(err => console.log(err));
+};
+
 // * * * * * * * * * * * * * * GET CART * * * * * * * * * * * * * *
 exports.getCart = (req, res, next) => {
   req.user
@@ -74,26 +95,35 @@ exports.getCart = (req, res, next) => {
 
   // * * * * * * * * * * * * * * GET ORDERS * * * * * * * * * * * * * *
   exports.getOrders = (req, res, next) => {
-    res.render('shop/orders', {
-      path: '/orders',
-      pageTitle: 'Your Orders'
-    });
+    Order.find({'user.userId' : req.user._id})
+    .then(orders => {
+        res.render('shop/orders', {
+          path: '/orders',
+          pageTitle: 'Your Orders',
+          orders: orders
+        });
+      })
+      .catch(err => console.log(err));
   };
 
 // * * * * * * * * * * * * * * POST ORDER * * * * * * * * * * * * * *
   exports.postOrder = (req, res, next) => {
+    let price = req.user.cart.totalPrice;
     req.user
       .populate('cart.items.productId')
       .then(user => {
         const products = user.cart.items.map(i => {
           return{quantity: i.quantity, product: {...i.productId._doc}}
         });
+        const date = new Date().toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}).toString();
         const order = new Order({
+          products: products,
+          totalPrice: price,
+          date: date,
           user: {
             name: req.user.name,
             userId: req.user
-          },
-          products: products
+          }
         });
         return order.save();
       })
@@ -111,13 +141,13 @@ exports.getCart = (req, res, next) => {
   */
 
 
-  // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
-  exports.getCheckout = (req, res, next) => {
-    res.render('shop/checkout', {
-      path: '/checkout',
-      pageTitle: 'Checkout'
-    });
-  };
+  // // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
+  // exports.getCheckout = (req, res, next) => {
+  //   res.render('shop/checkout', {
+  //     path: '/checkout',
+  //     pageTitle: 'Checkout'
+  //   });
+  // };
   
   // * * * * * * * * * * * * * * POST SEARCH * * * * * * * * * * * * * *
   /*

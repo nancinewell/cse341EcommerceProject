@@ -4,6 +4,27 @@
     <body>
         <%- include('../modules/header.ejs') %>
         <main>
-            <h1>Orders Page</h1>
+            <h1>Your Orders</h1>
+            <% if (orders.length <= 0) { %>
+                <h2>No orders yet.</h2>
+            <% } else { %>
+                <ul class="orders">
+                    <% orders.forEach(order => { %>
+                        <li class="orders__item">
+                            <h2>Order: <%= order._id %></h2>
+                            <h3>Date: <%= order.date %></h3>
+                                <% order.products.forEach(p => { %>
+                                    <div class="orders__products-item">
+                                        <p><%= p.product.title %></p>
+                                        <p>Qty: <%= p.quantity %></p>
+                                        <p>Price: <%= p.product.price %></p>
+                                    </div>
+                                <% }); %>
+                                <h3>Total Cost: <%= order.totalPrice %></h3>
+                        </li>
+                    <% }); %>
+                    
+                </ul>
+            <% } %>
         </main>
         <%- include('../modules/footer.ejs') %>

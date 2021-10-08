@@ -80,8 +80,16 @@
     main{
         padding: 5rem;
         width: 100vw;
+        max-width: 900px;
+        justify-self: center;
     }
-
+    .checkout-main{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
 
 /* * * * * * * * * * PRODUCT CARDS * * * * * * * * * * */
 .grid{
@@ -119,6 +127,11 @@ margin: 0;
     grid-template-columns: 1fr 1fr;
     grid-gap: 2rem;
 }
+
+
+
+
+
 /*DON'T DELETE THIS! IT CLOSES THE MEDIA QUERY*/
 }
    

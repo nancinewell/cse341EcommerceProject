@@ -3,7 +3,27 @@
 
     <body>
         <%- include('../modules/header.ejs') %>
-        <main>
-            <h1>Checkout Page</h1>
+        <main class="checkout-main">
+            <h1>Checkout</h1>
+            <div class="checkout-list">
+                <% products.forEach(p => { %> 
+                   <div class="checkout-item">
+                       <div class="checkout-item-info">
+                            <h3><%= p.productId.title %></>
+                            <h4> Quantity: <%= p.quantity %></h4>
+                            <h4> Price: <%= (Math.round(p.productId.price * p.quantity * 100) / 100).toFixed(2)%></h4>
+                        </div>
+                       <img class="checkout-img" src="<%= p.productId.imageUrl %>" alt="Picture of <%= p.productId.title %>">
+                    </div> 
+                <% }) %> 
+                    <h2 class="cart-total">Total Cost: <%= (Math.round(price * 100) / 100).toFixed(2) %></h2>
+                </div>
+            <div class="checkout-btns">
+                <a href='/' class='btn checkout-btn'>Continue Shopping</a>
+                
+                <form action="/orders" method="post">
+                    <button type="submit" class="checkout-btn btn">Place Order</button>
+                </form>
+            </div>
         </main>
         <%- include('../modules/footer.ejs') %>

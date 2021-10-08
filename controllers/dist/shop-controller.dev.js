@@ -6,9 +6,21 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["req.user: ", ""]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
 var Product = require('../models/product');
 
-var Cart = require('../models/cart'); // * * * * * * * * * * * * * * GET INDEX * * * * * * * * * * * * * *
+var Order = require('../models/orders'); // * * * * * * * * * * * * * * GET INDEX * * * * * * * * * * * * * *
 
 
 exports.getIndex = function (req, res, next) {
@@ -31,6 +43,23 @@ exports.getProduct = function (req, res, next) {
       product: product,
       pageTitle: product.title,
       path: '/products'
+    });
+  })["catch"](function (err) {
+    return console.log(err);
+  });
+}; // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
+
+
+exports.getCheckout = function (req, res, next) {
+  console.log(_templateObject(), req.user);
+  req.user.populate('cart.items.productId').then(function (user) {
+    var products = user.cart.items;
+    var price = user.cart.totalPrice;
+    res.render('shop/checkout', {
+      path: '/checkout',
+      pageTitle: 'Checkout',
+      products: products,
+      price: price
     });
   })["catch"](function (err) {
     return console.log(err);
@@ -77,14 +106,22 @@ exports.postCartDeleteProduct = function (req, res, next) {
 
 
 exports.getOrders = function (req, res, next) {
-  res.render('shop/orders', {
-    path: '/orders',
-    pageTitle: 'Your Orders'
+  Order.find({
+    'user.userId': req.user._id
+  }).then(function (orders) {
+    res.render('shop/orders', {
+      path: '/orders',
+      pageTitle: 'Your Orders',
+      orders: orders
+    });
+  })["catch"](function (err) {
+    return console.log(err);
   });
 }; // * * * * * * * * * * * * * * POST ORDER * * * * * * * * * * * * * *
 
 
 exports.postOrder = function (req, res, next) {
+  var price = req.user.cart.totalPrice;
   req.user.populate('cart.items.productId').then(function (user) {
     var products = user.cart.items.map(function (i) {
       return {
@@ -92,12 +129,20 @@ exports.postOrder = function (req, res, next) {
         product: _objectSpread({}, i.productId._doc)
       };
     });
+    var date = new Date().toLocaleDateString('en-us', {
+      weekday: "long",
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    }).toString();
     var order = new Order({
+      products: products,
+      totalPrice: price,
+      date: date,
       user: {
         name: req.user.name,
         userId: req.user
-      },
-      products: products
+      }
     });
     return order.save();
   }).then(function (result) {
@@ -113,15 +158,14 @@ exports.postOrder = function (req, res, next) {
 FIX CHECKOUT PAGE
 
 */
-// * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
-
-
-exports.getCheckout = function (req, res, next) {
-  res.render('shop/checkout', {
-    path: '/checkout',
-    pageTitle: 'Checkout'
-  });
-}; // * * * * * * * * * * * * * * POST SEARCH * * * * * * * * * * * * * *
+// // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
+// exports.getCheckout = (req, res, next) => {
+//   res.render('shop/checkout', {
+//     path: '/checkout',
+//     pageTitle: 'Checkout'
+//   });
+// };
+// * * * * * * * * * * * * * * POST SEARCH * * * * * * * * * * * * * *
 
 /*
 
