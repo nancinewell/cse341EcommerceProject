@@ -24,6 +24,7 @@ var Order = require('../models/orders'); // * * * * * * * * * * * * * * GET INDE
 
 
 exports.getIndex = function (req, res, next) {
+  //get all products from db and render in index
   Product.find().then(function (products) {
     res.render('shop/index', {
       prods: products,
@@ -31,21 +32,24 @@ exports.getIndex = function (req, res, next) {
       path: '/'
     });
   })["catch"](function (err) {
-    console.log(err);
+    return console.log("Error: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * GET PRODUCT * * * * * * * * * * * * * *
 
 
 exports.getProduct = function (req, res, next) {
-  var prodId = req.params.productId;
+  //get product id from req params
+  var prodId = req.params.productId; //locate product by id, then render the details page with product info
+
   Product.findById(prodId).then(function (product) {
     res.render('shop/product-detail', {
       product: product,
       pageTitle: product.title,
-      path: '/products'
+      path: '/products',
+      isAuthenticated: req.session.isLoggedIn
     });
   })["catch"](function (err) {
-    return console.log(err);
+    return console.log("Error: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
 
@@ -62,12 +66,13 @@ exports.getCheckout = function (req, res, next) {
       price: price
     });
   })["catch"](function (err) {
-    return console.log(err);
+    return console.log("Error: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * GET CART * * * * * * * * * * * * * *
 
 
 exports.getCart = function (req, res, next) {
+  //get the cart items and info from the req.user to render in the cart
   req.user.populate('cart.items.productId').then(function (user) {
     var products = user.cart.items;
     var price = user.cart.totalPrice;
@@ -75,66 +80,79 @@ exports.getCart = function (req, res, next) {
       path: '/cart',
       pageTitle: 'Your Cart',
       products: products,
-      price: price
+      price: price,
+      isAuthenticated: req.session.isLoggedIn
     });
   })["catch"](function (err) {
-    return console.log(err);
+    return console.log("Error: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * POST CART * * * * * * * * * * * * * *
 
 
 exports.postCart = function (req, res, next) {
-  var prodId = req.body.productId;
+  //get product id from req
+  var prodId = req.body.productId; //locate product by id and add it to the cart
+
   Product.findById(prodId).then(function (product) {
     return req.user.addToCart(product);
   }).then(function (result) {
+    //redirect to the cart
     res.redirect('/cart');
   });
 }; // * * * * * * * * * * * * * * POST CART DELETE PRODUCT * * * * * * * * * * * * * *
 
 
 exports.postCartDeleteProduct = function (req, res, next) {
+  //gather product info from req
   var prodId = req.body.productId;
   var qty = req.body.quantity;
-  var price = req.body.price;
+  var price = req.body.price; //remove from cart and redirect back to the cart
+
   req.user.removeFromCart(prodId, qty, price).then(function (result) {
     res.redirect('/cart');
   })["catch"](function (err) {
-    return console.log(err);
+    return console.log("Error: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * GET ORDERS * * * * * * * * * * * * * *
 
 
 exports.getOrders = function (req, res, next) {
+  //locate orders for this user and render orders page with info
   Order.find({
     'user.userId': req.user._id
   }).then(function (orders) {
     res.render('shop/orders', {
       path: '/orders',
       pageTitle: 'Your Orders',
-      orders: orders
+      orders: orders,
+      isAuthenticated: req.session.isLoggedIn
     });
   })["catch"](function (err) {
-    return console.log(err);
+    return console.log("Error: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * POST ORDER * * * * * * * * * * * * * *
 
 
 exports.postOrder = function (req, res, next) {
-  var price = req.user.cart.totalPrice;
+  //get price 
+  var price = req.user.cart.totalPrice; //get product info from user's cart
+
   req.user.populate('cart.items.productId').then(function (user) {
+    //get qty, and product info for each product in cart
     var products = user.cart.items.map(function (i) {
       return {
         quantity: i.quantity,
         product: _objectSpread({}, i.productId._doc)
       };
-    });
+    }); //set date of order
+
     var date = new Date().toLocaleDateString('en-us', {
       weekday: "long",
       year: "numeric",
       month: "short",
       day: "numeric"
-    }).toString();
+    }).toString(); //create new order using the user, products, qty, date, and total price
+
     var order = new Order({
       products: products,
       totalPrice: price,
@@ -143,14 +161,17 @@ exports.postOrder = function (req, res, next) {
         name: req.user.name,
         userId: req.user
       }
-    });
+    }); //save the order
+
     return order.save();
   }).then(function (result) {
+    //clear the cart
     return req.user.clearCart();
   }).then(function () {
+    //redirect to the orders page
     res.redirect('/orders');
   })["catch"](function (err) {
-    return console.log(err);
+    return console.log("Error: ".concat(err));
   });
 };
 /*

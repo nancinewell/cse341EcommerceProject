@@ -23,6 +23,7 @@
                 
                 <form action="/orders" method="post">
                     <button type="submit" class="checkout-btn btn">Place Order</button>
+                    <input type="hidden" value="<%= csrfToken %>" name="_csrf">
                 </form>
             </div>
         </main>

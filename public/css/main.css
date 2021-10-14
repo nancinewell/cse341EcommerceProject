@@ -17,6 +17,7 @@ Dark Gray: 5c6d7b
   }
 
 body{
+    overflow-x: hidden;
     margin: 0;
     padding: 0;
     display: grid;
@@ -210,7 +211,7 @@ main.error-main{
 
 
 #mobile-menu-toggle:checked ~ ul{
-    transform: scale(1) translate(0, 0);
+    transform: scale(1);
 }
 nav{
     height: 0;
@@ -219,16 +220,18 @@ nav{
 }
 
 nav ul{
+    margin: auto;
     list-style: none;
-    margin: 0 1rem 0 0;
     padding: .5rem;
-    position: relative;
-    top: 4rem;
+    width: 75%;
     background-color: #6980a3;
-    transform: scale(0) translate(10rem, 0);
+    transform: scale(0) ;
     transition: 0.3s;
-    border-radius: 15px;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 1.5rem;
 }
 
 nav ul li{

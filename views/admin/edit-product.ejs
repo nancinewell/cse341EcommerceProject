@@ -26,6 +26,7 @@
                 <input type="hidden" value="<%= product._id %>" name="productId">
                 <% } %>
             <div class="add-buttons">
+                <input type="hidden" value="<%= csrfToken %>" name="_csrf">
                 <button class="btn" type="submit"><% if(editing) { %> Update Product <% } else { %> Add Product <% } %></button>
                 <input class="btn" type="submit" formaction='/admin/add-another' value="Add Another">
             </div>

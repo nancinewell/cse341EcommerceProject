@@ -32,8 +32,27 @@
             <li><a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a></li>
             <li><a href="/cart" class="<%= path === '/cart' ? 'active' : '' %>">Cart</a></li>
             <li><a href="/orders" class="<%= path === '/orders' ? 'active' : '' %>">Orders</a></li>
+            <% if (isAuthenticated) { %>
             <li><a href="/admin/products" class="<%= path === '/admin/products' ? 'active' : '' %>">Admin Products</a></li>
             <li><a href="/admin/add-product" class="<%= path === '/admin/add-product' ? 'active' : '' %>">Add Product</a></li>
+            <% } %>
+        </ul>
+        <ul class="main-header__item-list">
+            <% if (!isAuthenticated) { %>
+                <li class="main-header__item">
+                    <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
+                </li>
+                <li class="main-header__item">
+                    <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Signup</a>
+                </li>
+            <% } else { %>
+                <li class="main-header__item">
+                    <form action="/logout" method="post">
+                        <input type="hidden" value="<%= csrfToken %>" name="_csrf">
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+            <% } %>
         </ul>
         
     </nav>
