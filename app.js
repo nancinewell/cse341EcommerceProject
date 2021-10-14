@@ -7,12 +7,26 @@ const bodyParser = require('body-parser');
 const User = require('./models/user');
 const cors = require('cors') 
 const app = express();
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
+const flash = require('connect-flash');
 
 const corsOptions = {
     origin: "https://newell-ecommerce.herokuapp.com/",
     optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+
+app.use(session({secret: 'aLongStringValue', resave: false, saveUninitialized: false}));
+
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions'
+});
+
+app.use(session({secret: 'aLongStringValue', resave: false, saveUninitialized: false, store: store}));
+app.use(flash());
 
 const MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
 

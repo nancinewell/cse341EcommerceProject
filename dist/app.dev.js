@@ -15,11 +15,36 @@ var User = require('./models/user');
 var cors = require('cors');
 
 var app = express();
+
+var session = require('express-session');
+
+var MongoDBStore = require('connect-mongodb-session')(session);
+
+var csrf = require('csurf');
+
+var flash = require('connect-flash');
+
 var corsOptions = {
   origin: "https://newell-ecommerce.herokuapp.com/",
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+app.use(session({
+  secret: 'aLongStringValue',
+  resave: false,
+  saveUninitialized: false
+}));
+var store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions'
+});
+app.use(session({
+  secret: 'aLongStringValue',
+  resave: false,
+  saveUninitialized: false,
+  store: store
+}));
+app.use(flash());
 var MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
 app.set('view engine', 'ejs');
 app.set('views', 'views');
