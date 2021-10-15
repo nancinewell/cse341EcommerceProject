@@ -4,40 +4,52 @@ var port = process.env.PORT || 5000;
 
 var path = require('path');
 
-var mongoose = require('mongoose');
-
 var express = require('express');
 
 var bodyParser = require('body-parser');
 
-var User = require('./models/user');
-
-var cors = require('cors');
-
-var app = express();
+var mongoose = require('mongoose');
 
 var session = require('express-session');
 
 var MongoDBStore = require('connect-mongodb-session')(session);
 
-var flash = require('connect-flash');
-
 var csrf = require('csurf');
 
+var flash = require('connect-flash');
+
+var User = require('./models/user');
+
+var MONGODB_URI = 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
+
+var cors = require('cors');
+
+var app = express();
+var store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions'
+});
 var csrfProtection = csrf();
 var corsOptions = {
   origin: "https://newell-ecommerce.herokuapp.com/",
   optionsSuccessStatus: 200
 };
-app.use(cors(corsOptions));
-var MONGODB_URI = 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
-var store = new MongoDBStore({
-  uri: MONGODB_URI,
-  collection: 'sessions'
-}); //EJS, set views
+app.use(cors(corsOptions)); //EJS, set views
 
 app.set('view engine', 'ejs');
-app.set('views', 'views'); //start session
+app.set('views', 'views'); //establish routes
+
+var adminRoutes = require('./routes/admin-routes');
+
+var shopRoutes = require('./routes/shop-routes');
+
+var authRoutes = require('./routes/auth-routes'); //set path roots
+
+
+app.use(express["static"](path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({
+  extended: false
+})); //start session
 
 app.use(session({
   secret: '2Nephi9:29_Ether12:6',
@@ -47,7 +59,8 @@ app.use(session({
 })); //use csurf to prevent cross site attacks
 
 app.use(csrfProtection); //after the session started, before routes
-//find user to pass through requests if user is logged in
+
+app.use(flash()); //find user to pass through requests if user is logged in
 
 app.use(function (req, res, next) {
   if (!req.session.user) {
@@ -66,20 +79,7 @@ app.use(function (req, res, next) {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
   next();
-});
-app.use(flash()); //establish routes
-
-var adminRoutes = require('./routes/admin-routes');
-
-var shopRoutes = require('./routes/shop-routes');
-
-var authRoutes = require('./routes/auth-routes'); //set path roots
-
-
-app.use(express["static"](path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({
-  extended: false
-})); //use routes
+}); //use routes
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

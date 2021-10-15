@@ -523,3 +523,15 @@ h2.cart-total{
     padding: 1rem;
     box-shadow: 5px 5px 15px #6980a3;
 }
+
+.orders__item{
+    margin-bottom: 2rem;
+}
+
+/* * * * * * * * * * USER MESSAGES * * * * * * * * * * */
+.user-message{
+    text-align: center;
+    font-size: 1.5rem;
+    font-family: 'Koh Santepheap', cursive;
+    margin-bottom: 1rem;
+}

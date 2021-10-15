@@ -53,7 +53,7 @@ exports.postLogin = (req, res, next) => {
                         req.session.isLoggedIn = true;
                         //save the session, log any errors, and send Home
                         return req.session.save((err) => {
-                            console.log(`Error: ${err}`);
+                            console.log(`Error line 56: ${err}`);
                             res.redirect('/');
                         });
                     }
@@ -63,14 +63,14 @@ exports.postLogin = (req, res, next) => {
                 })
                 //catch any errors, log them, and redirect to login page.
                 .catch(err => {
-                    console.log(`Error: ${err}`);
+                    console.log(`Error line 66: ${err}`);
                     res.redirect('/login');
                 })
 
         })
     //catch any errors and log them.
     .catch(err => {
-        console.log(`Error: ${err}`);
+        console.log(`Error line 73: ${err}`);
     });
 }
 
@@ -104,26 +104,32 @@ exports.getSignup = (req, res, next) => {
 // * * * * * * * * * * POST SIGNUP * * * * * * * * * * 
 exports.postSignup = (req, res, next) => {
     //gather info from form
+    const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
 
     //Does user already exist?
     User.findOne({email:email})
-        .then(userdoc => {
+        .then(userDoc => {
             //if email already exists, redirect to login page with error message
             if(userDoc){
                 req.flash('error', 'Email already exists. Please log in.');
                 return res.redirect('/login');
             }
             
-/* * * * * * * * * * * * compare passwords to ensure they match * * * * * * * * * * */
+            //compare password and confirmPassword. If they don't match, then return to signup page with error
+            if(password !== confirmPassword){
+                req.flash('error', 'Passwords don\'t match. Please ensure the password is the same in both fields.');
+                return res.redirect('/signup');
+            }
 
             //If email doesn't exist, hash the password 12 times for good measure.
             return bcrypt.hash(password, 12)
                 //then create a new user with the hashed password
                 .then(hashedPassword => {
                     const user = new User({
+                        name: name,
                         email: email,
                         password: hashedPassword,
                         cart: {items: []}
@@ -142,17 +148,17 @@ exports.postSignup = (req, res, next) => {
                     }, function(err, info){
                         //log any errors or sucesses
                         if(err){
-                            console.log(`Error: ${err}`);
+                            console.log(`Error line 145: ${err}`);
                         } else {
                             console.log(`Message sent: ${info}`);
                         }
                     });
                 })
                 .catch(err => {
-                    console.log(`Error: ${err}`);
+                    console.log(`Error line 152: ${err}`);
                 });
         })
         .catch(err => {
-            console.log(`Error: ${err}`);
+            console.log(`Error line 156: ${err}`);
         });
 };

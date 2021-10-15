@@ -1,16 +1,22 @@
 const port = process.env.PORT || 5000;
 const path = require('path');
-const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-const User = require('./models/user');
-const cors = require('cors') 
-const app = express();
+const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-const flash = require('connect-flash');
 const csrf = require('csurf');
+const flash = require('connect-flash');
+const User = require('./models/user');
 
+const MONGODB_URI = 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
+
+const cors = require('cors') 
+const app = express();
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions'
+});
 const csrfProtection = csrf();
 
 const corsOptions = {
@@ -19,24 +25,26 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-
-const MONGODB_URI = 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
-
-const store = new MongoDBStore({
-  uri: MONGODB_URI,
-  collection: 'sessions'
-});
-
 //EJS, set views
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+//establish routes
+const adminRoutes = require('./routes/admin-routes');
+const shopRoutes = require('./routes/shop-routes');
+const authRoutes = require('./routes/auth-routes');
+
+//set path roots
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: false }));
+
 //start session
 app.use(session({secret: '2Nephi9:29_Ether12:6', resave: false, saveUninitialized: false, store: store}));
 
-
 //use csurf to prevent cross site attacks
 app.use(csrfProtection); //after the session started, before routes
+
+app.use(flash());
 
 //find user to pass through requests if user is logged in
 app.use((req, res, next) => {
@@ -58,18 +66,6 @@ app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   next();
 });
-
-app.use(flash());
-
-//establish routes
-const adminRoutes = require('./routes/admin-routes');
-const shopRoutes = require('./routes/shop-routes');
-const authRoutes = require('./routes/auth-routes');
-
-//set path roots
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: false }));
-
 
 
 //use routes

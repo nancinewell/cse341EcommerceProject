@@ -4,9 +4,13 @@
 <%- include('../modules/header.ejs'); %>
 <main>
     <% if(errorMessage){ %>
-        <div class="user-message user-message--error"><%= errorMessage %></div>
+        <div class="user-message"><%= errorMessage %></div>
     <% } %>
     <form class="login-form" action="/signup" method="POST">
+        <div class="form-control">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
+        </div>
         <div class="form-control">
             <label for="email">Email</label>
             <input type="email" name="email" id="email">
