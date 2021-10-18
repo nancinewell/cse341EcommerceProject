@@ -56,7 +56,7 @@ app.use((req, res, next) => {
         req.user = user;
         next();
       })
-      .catch(err => console.log(`Error: ${err}`));
+      .catch(err => console.log(`Error app.js 59: ${err}`));
 });
 
 

@@ -11,7 +11,7 @@ exports.getProducts = function (req, res, next) {
       prods: products,
       pageTitle: 'Admin Products',
       path: '/admin/products',
-      isAuthenticated: req.session.isLoggedIn
+      user: req.user.name
     });
   })["catch"](function (err) {
     console.log("Error: ".concat(err));
@@ -25,7 +25,7 @@ exports.getAddProduct = function (req, res, next) {
     pageTitle: 'Add Product',
     path: '/admin/add-product',
     editing: false,
-    isAuthenticated: req.session.isLoggedIn
+    user: req.user.name
   });
 }; // * * * * * * * * * * * * * * POST ADD PRODUCT * * * * * * * * * * * * * *
 
@@ -50,7 +50,7 @@ exports.postAddProduct = function (req, res, next) {
     console.log('Created Product');
     res.redirect('/admin/products');
   })["catch"](function (err) {
-    console.log("Error: ".concat(err));
+    console.log("Error admin-controller 57: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * POST ADD ANOTHER PRODUCT * * * * * * * * * * * * * *
 
@@ -74,7 +74,8 @@ exports.postAddAnotherProduct = function (req, res, next) {
     res.render('admin/edit-product', {
       pageTitle: 'Add Product',
       path: '/admin/add-product',
-      editing: false
+      editing: false,
+      user: req.user.name
     });
   })["catch"](function (err) {
     console.log(err);
@@ -104,10 +105,10 @@ exports.getEditProduct = function (req, res, next) {
       path: '/admin/edit-product',
       editing: editMode,
       product: product,
-      isAuthenticated: req.session.isLoggedIn
+      user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error admin-controller 118: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * POST EDIT PRODUCT * * * * * * * * * * * * * *
 
@@ -132,7 +133,7 @@ exports.postEditProduct = function (req, res, next) {
     console.log('UPDATED PRODUCT!');
     res.redirect('/admin/products');
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error admin-controller 145: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * POST DELETE PRODUCT * * * * * * * * * * * * * *
 
@@ -145,6 +146,6 @@ exports.postDeleteProduct = function (req, res, next) {
     console.log('DESTROYED PRODUCT');
     res.redirect('/admin/products');
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error admin-controller 158: ".concat(err));
   });
 };

@@ -258,11 +258,27 @@ nav ul li:hover{
     transition: 0.3s;
 }
 
+.logout-button:hover{
+    transform: scale(1.15);
+    transition: 0.3s; 
+    color: #fad630;
+}
+
 nav ul li a:active{
     color: #fad630;
 }
 
+.logout-button{
+    text-align: center;
+    font-size: 1.5rem;
+    background-color: transparent;
+    border: none;
+    color: #fff; 
+}
 
+.welcome{
+    visibility: hidden;
+}
 /* * * * * * * * * * FORM * * * * * * * * * * */
 fieldset{
     border-radius: 15px;

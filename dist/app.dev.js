@@ -71,7 +71,7 @@ app.use(function (req, res, next) {
     req.user = user;
     next();
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error app.js 59: ".concat(err));
   });
 }); //set up middleware to send authentication and csrf token on every view rendered
 

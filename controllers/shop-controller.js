@@ -4,15 +4,30 @@ const Order = require('../models/orders');
 // * * * * * * * * * * * * * * GET INDEX * * * * * * * * * * * * * *
 exports.getIndex = (req, res, next) => {
   //get all products from db and render in index
-  Product.find()
+  if(!req.user){
+    Product.find()
     .then(products => {
+      
       res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',
         path: '/'
       });
     })
-    .catch(err => console.log(`Error: ${err}`));
+    .catch(err => console.log(`Error shop-controller 17: ${err}`));
+  } else {
+  Product.find()
+    .then(products => {
+      
+      res.render('shop/index', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/',
+        user: req.user.name
+      });
+    })
+    .catch(err => console.log(`Error shop-controller 17: ${err}`));
+  }
 };
 
 // * * * * * * * * * * * * * * GET PRODUCT * * * * * * * * * * * * * *
@@ -27,10 +42,10 @@ exports.getProduct = (req, res, next) => {
         product: product,
         pageTitle: product.title,
         path: '/products',
-        isAuthenticated: req.session.isLoggedIn
+        user: req.user.name
       });
     })
-    .catch(err => console.log(`Error: ${err}`));
+    .catch(err => console.log(`Error shop-controller 35: ${err}`));
 };
     
 
@@ -48,10 +63,11 @@ exports.getCheckout = (req, res, next) => {
         path: '/checkout',
         pageTitle: 'Checkout',
         products: products,
-        price: price
+        price: price,
+        user: req.user.name
       });
     })
-    .catch(err => console.log(`Error: ${err}`));
+    .catch(err => console.log(`Error shop-controller 57: ${err}`));
 };
 
 // * * * * * * * * * * * * * * GET CART * * * * * * * * * * * * * *
@@ -67,10 +83,10 @@ exports.getCart = (req, res, next) => {
         pageTitle: 'Your Cart',
         products: products,
         price: price,
-        isAuthenticated: req.session.isLoggedIn
+        user: req.user.name
       });
     })
-    .catch(err => console.log(`Error: ${err}`));
+    .catch(err => console.log(`Error shop-controller 76: ${err}`));
 };
 
 // * * * * * * * * * * * * * * POST CART * * * * * * * * * * * * * *
@@ -103,7 +119,7 @@ exports.getCart = (req, res, next) => {
       .then(result => {
         res.redirect('/cart');
       })
-      .catch(err => console.log(`Error: ${err}`));
+      .catch(err => console.log(`Error shop-controller 109: ${err}`));
   };
 
   // * * * * * * * * * * * * * * GET ORDERS * * * * * * * * * * * * * *
@@ -115,10 +131,10 @@ exports.getCart = (req, res, next) => {
           path: '/orders',
           pageTitle: 'Your Orders',
           orders: orders,
-          isAuthenticated: req.session.isLoggedIn
+          user: req.user.name
         });
       })
-      .catch(err => console.log(`Error: ${err}`));
+      .catch(err => console.log(`Error shop-controller 124: ${err}`));
   };
 
 // * * * * * * * * * * * * * * POST ORDER * * * * * * * * * * * * * *
@@ -162,29 +178,10 @@ exports.getCart = (req, res, next) => {
         //redirect to the orders page
         res.redirect('/orders');
       })
-      .catch(err => console.log(`Error: ${err}`));
+      .catch(err => console.log(`Error shop-controller 168: ${err}`));
   };
-  /*
-  
-  FIX CHECKOUT PAGE
-  
-  */
-
-
-  // // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
-  // exports.getCheckout = (req, res, next) => {
-  //   res.render('shop/checkout', {
-  //     path: '/checkout',
-  //     pageTitle: 'Checkout'
-  //   });
-  // };
   
   // * * * * * * * * * * * * * * POST SEARCH * * * * * * * * * * * * * *
-  /*
-  
-  FIX THIS TO MONGOOSE!
-  
-  */
   exports.postSearch = (req, res, next) => {
     const search = req.body.search;
     Product.find({"title": { $regex: '.*'+search+'.*', $options: 'i' }})
@@ -192,7 +189,8 @@ exports.getCart = (req, res, next) => {
         res.render('shop/index', {
         prods: products,
         pageTitle: 'Search Results',
-        path: '/'
+        path: '/',
+        user: req.user.name
       });
     });
   };

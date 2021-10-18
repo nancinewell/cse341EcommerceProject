@@ -56,7 +56,7 @@ exports.postLogin = function (req, res, next) {
         req.session.isLoggedIn = true; //save the session, log any errors, and send Home
 
         return req.session.save(function (err) {
-          console.log("Error line 56: ".concat(err));
+          console.log("Error auth-controller 56: ".concat(err));
           res.redirect('/');
         });
       } //If they don't match, then send back to login page with error message.
@@ -66,12 +66,12 @@ exports.postLogin = function (req, res, next) {
       res.redirect('/login');
     }) //catch any errors, log them, and redirect to login page.
     ["catch"](function (err) {
-      console.log("Error line 66: ".concat(err));
+      console.log("Error auth-controller 66: ".concat(err));
       res.redirect('/login');
     });
   }) //catch any errors and log them.
   ["catch"](function (err) {
-    console.log("Error line 73: ".concat(err));
+    console.log("Error auth-controller 73: ".concat(err));
   });
 }; // * * * * * * * * * * POST LOGOUT * * * * * * * * * * 
 
@@ -79,7 +79,7 @@ exports.postLogin = function (req, res, next) {
 exports.postLogout = function (req, res, next) {
   //destroy the session, log any errors, and redirect Home
   req.session.destroy(function (err) {
-    console.log("Error: ".concat(err));
+    console.log("Error  auth-controller 81: ".concat(err));
     res.redirect('/');
   });
 }; // * * * * * * * * * * GET SIGNUP * * * * * * * * * * 
@@ -151,15 +151,15 @@ exports.postSignup = function (req, res, next) {
       }, function (err, info) {
         //log any errors or sucesses
         if (err) {
-          console.log("Error line 145: ".concat(err));
+          console.log("Error auth-controller 145: ".concat(err));
         } else {
           console.log("Message sent: ".concat(info));
         }
       });
     })["catch"](function (err) {
-      console.log("Error line 152: ".concat(err));
+      console.log("Error auth-controller 152: ".concat(err));
     });
   })["catch"](function (err) {
-    console.log("Error line 156: ".concat(err));
+    console.log("Error auth-controller 156: ".concat(err));
   });
 };

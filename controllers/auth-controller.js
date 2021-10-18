@@ -53,7 +53,7 @@ exports.postLogin = (req, res, next) => {
                         req.session.isLoggedIn = true;
                         //save the session, log any errors, and send Home
                         return req.session.save((err) => {
-                            console.log(`Error line 56: ${err}`);
+                            console.log(`Error auth-controller 56: ${err}`);
                             res.redirect('/');
                         });
                     }
@@ -63,14 +63,14 @@ exports.postLogin = (req, res, next) => {
                 })
                 //catch any errors, log them, and redirect to login page.
                 .catch(err => {
-                    console.log(`Error line 66: ${err}`);
+                    console.log(`Error auth-controller 66: ${err}`);
                     res.redirect('/login');
                 })
 
         })
     //catch any errors and log them.
     .catch(err => {
-        console.log(`Error line 73: ${err}`);
+        console.log(`Error auth-controller 73: ${err}`);
     });
 }
 
@@ -78,7 +78,7 @@ exports.postLogin = (req, res, next) => {
 exports.postLogout = (req, res, next) => {
     //destroy the session, log any errors, and redirect Home
     req.session.destroy( err => {
-        console.log(`Error: ${err}`);
+        console.log(`Error  auth-controller 81: ${err}`);
         res.redirect('/');
     })
 }
@@ -148,17 +148,17 @@ exports.postSignup = (req, res, next) => {
                     }, function(err, info){
                         //log any errors or sucesses
                         if(err){
-                            console.log(`Error line 145: ${err}`);
+                            console.log(`Error auth-controller 145: ${err}`);
                         } else {
                             console.log(`Message sent: ${info}`);
                         }
                     });
                 })
                 .catch(err => {
-                    console.log(`Error line 152: ${err}`);
+                    console.log(`Error auth-controller 152: ${err}`);
                 });
         })
         .catch(err => {
-            console.log(`Error line 156: ${err}`);
+            console.log(`Error auth-controller 156: ${err}`);
         });
 };

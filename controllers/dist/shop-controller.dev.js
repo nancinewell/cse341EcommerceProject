@@ -25,15 +25,28 @@ var Order = require('../models/orders'); // * * * * * * * * * * * * * * GET INDE
 
 exports.getIndex = function (req, res, next) {
   //get all products from db and render in index
-  Product.find().then(function (products) {
-    res.render('shop/index', {
-      prods: products,
-      pageTitle: 'Shop',
-      path: '/'
+  if (!req.user) {
+    Product.find().then(function (products) {
+      res.render('shop/index', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/'
+      });
+    })["catch"](function (err) {
+      return console.log("Error shop-controller 17: ".concat(err));
     });
-  })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
-  });
+  } else {
+    Product.find().then(function (products) {
+      res.render('shop/index', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/',
+        user: req.user.name
+      });
+    })["catch"](function (err) {
+      return console.log("Error shop-controller 17: ".concat(err));
+    });
+  }
 }; // * * * * * * * * * * * * * * GET PRODUCT * * * * * * * * * * * * * *
 
 
@@ -46,10 +59,10 @@ exports.getProduct = function (req, res, next) {
       product: product,
       pageTitle: product.title,
       path: '/products',
-      isAuthenticated: req.session.isLoggedIn
+      user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error shop-controller 35: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
 
@@ -63,10 +76,11 @@ exports.getCheckout = function (req, res, next) {
       path: '/checkout',
       pageTitle: 'Checkout',
       products: products,
-      price: price
+      price: price,
+      user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error shop-controller 57: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * GET CART * * * * * * * * * * * * * *
 
@@ -81,10 +95,10 @@ exports.getCart = function (req, res, next) {
       pageTitle: 'Your Cart',
       products: products,
       price: price,
-      isAuthenticated: req.session.isLoggedIn
+      user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error shop-controller 76: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * POST CART * * * * * * * * * * * * * *
 
@@ -111,7 +125,7 @@ exports.postCartDeleteProduct = function (req, res, next) {
   req.user.removeFromCart(prodId, qty, price).then(function (result) {
     res.redirect('/cart');
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error shop-controller 109: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * GET ORDERS * * * * * * * * * * * * * *
 
@@ -125,10 +139,10 @@ exports.getOrders = function (req, res, next) {
       path: '/orders',
       pageTitle: 'Your Orders',
       orders: orders,
-      isAuthenticated: req.session.isLoggedIn
+      user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error shop-controller 124: ".concat(err));
   });
 }; // * * * * * * * * * * * * * * POST ORDER * * * * * * * * * * * * * *
 
@@ -171,28 +185,9 @@ exports.postOrder = function (req, res, next) {
     //redirect to the orders page
     res.redirect('/orders');
   })["catch"](function (err) {
-    return console.log("Error: ".concat(err));
+    return console.log("Error shop-controller 168: ".concat(err));
   });
-};
-/*
-
-FIX CHECKOUT PAGE
-
-*/
-// // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
-// exports.getCheckout = (req, res, next) => {
-//   res.render('shop/checkout', {
-//     path: '/checkout',
-//     pageTitle: 'Checkout'
-//   });
-// };
-// * * * * * * * * * * * * * * POST SEARCH * * * * * * * * * * * * * *
-
-/*
-
-FIX THIS TO MONGOOSE!
-
-*/
+}; // * * * * * * * * * * * * * * POST SEARCH * * * * * * * * * * * * * *
 
 
 exports.postSearch = function (req, res, next) {
@@ -206,7 +201,8 @@ exports.postSearch = function (req, res, next) {
     res.render('shop/index', {
       prods: products,
       pageTitle: 'Search Results',
-      path: '/'
+      path: '/',
+      user: req.user.name
     });
   });
 };

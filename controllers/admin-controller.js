@@ -10,7 +10,7 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: 'Admin Products',
         path: '/admin/products',
-        isAuthenticated: req.session.isLoggedIn
+        user: req.user.name
       });
     })
     .catch(err => {
@@ -25,7 +25,7 @@ exports.getProducts = (req, res, next) => {
       pageTitle: 'Add Product',
       path: '/admin/add-product',
       editing: false,
-      isAuthenticated: req.session.isLoggedIn
+      user: req.user.name
     });
   };
 
@@ -54,7 +54,7 @@ exports.getProducts = (req, res, next) => {
         res.redirect('/admin/products');
       })
       .catch(err => {
-        console.log(`Error: ${err}`);
+        console.log(`Error admin-controller 57: ${err}`);
       });
     };
 
@@ -79,7 +79,8 @@ exports.postAddAnotherProduct = (req, res, next) => {
       res.render('admin/edit-product', {
         pageTitle: 'Add Product',
         path: '/admin/add-product',
-        editing: false
+        editing: false,
+        user: req.user.name
       });
     })
     .catch(err => {
@@ -111,10 +112,10 @@ exports.postAddAnotherProduct = (req, res, next) => {
           path: '/admin/edit-product',
           editing: editMode,
           product: product,
-          isAuthenticated: req.session.isLoggedIn
+          user: req.user.name
         });
       })
-      .catch(err => console.log(`Error: ${err}`));
+      .catch(err => console.log(`Error admin-controller 118: ${err}`));
 };
 
 // * * * * * * * * * * * * * * POST EDIT PRODUCT * * * * * * * * * * * * * *
@@ -141,7 +142,7 @@ exports.postAddAnotherProduct = (req, res, next) => {
         console.log('UPDATED PRODUCT!');
         res.redirect('/admin/products');
         })
-      .catch(err => console.log(`Error: ${err}`));
+      .catch(err => console.log(`Error admin-controller 145: ${err}`));
 };
 
   // * * * * * * * * * * * * * * POST DELETE PRODUCT * * * * * * * * * * * * * *
@@ -154,6 +155,6 @@ exports.postAddAnotherProduct = (req, res, next) => {
         console.log('DESTROYED PRODUCT');
         res.redirect('/admin/products');
       })
-      .catch(err => console.log(`Error: ${err}`));
+      .catch(err => console.log(`Error admin-controller 158: ${err}`));
   };
   
