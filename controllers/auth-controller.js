@@ -141,25 +141,26 @@ exports.postSignup = (req, res, next) => {
                 //then redirect to login and send confirmation email
                 .then(result => {
                     res.redirect('/login');
-                    return transporter.sendMail({
-                        to:email,
-                        from: 'nanci.newell@gmail.com',
-                        subject: 'Thanks for Signing Up!',
-                        html: "<h1>You've successfully signed up for Munchkin Madness!</h1><p>We're so happy to find another kindred spirit ready to take down their friends with silliness and adventure!</p>"
-                    }, function(err, info){
-                        //log any errors or sucesses
-                        if(err){
-                            console.log(`Error auth-controller 145: ${err}`);
-                        } else {
-                            console.log(`Message sent: ${info}`);
-                        }
-                    });
+                    console.log("Thanks for Signing Up!")
+                    // return transporter.sendMail({
+                    //     to:email,
+                    //     from: 'nanci.newell@gmail.com',
+                    //     subject: 'Thanks for Signing Up!',
+                    //     html: "<h1>You've successfully signed up for Munchkin Madness!</h1><p>We're so happy to find another kindred spirit ready to take down their friends with silliness and adventure!</p>"
+                    // }, function(err, info){
+                    //     //log any errors or sucesses
+                    //     if(err){
+                    //         console.log(`Error auth-controller 145: ${err}`);
+                    //     } else {
+                    //         console.log(`Message sent: ${info}`);
+                    //     }
+                    // });
                 })
                 .catch(err => {
-                    console.log(`Error auth-controller 152: ${err}`);
+                    console.log(`Error auth-controller 160: ${err}`);
                 });
         })
         .catch(err => {
-            console.log(`Error auth-controller 156: ${err}`);
+            console.log(`Error auth-controller 164: ${err}`);
         });
 };
