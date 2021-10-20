@@ -10,7 +10,7 @@ const flash = require('connect-flash');
 const User = require('./models/user');
 require('dotenv').config();
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority'//process.env.MONGODB_URI;
 
 const cors = require('cors') 
 const app = express();

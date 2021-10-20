@@ -2,20 +2,17 @@
 
 var User = require('../models/user');
 
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcryptjs'); //const nodemailer = require('nodemailer');
+// const sendgridTransport = require('nodemailer-sendgrid-transport');
+// const sgMail = require('@sendgrid/mail');
+// sgMail.setApiKey(process.env.API_KEY);
+// const transporter = nodemailer.createTransport(sendgridTransport({
+//     auth: {
+//       api_key: process.env.API_KEY
+//     }
+//   }));
+// * * * * * * * * * * GET LOGIN * * * * * * * * * * 
 
-var nodemailer = require('nodemailer');
-
-var sendgridTransport = require('nodemailer-sendgrid-transport');
-
-var sgMail = require('@sendgrid/mail');
-
-sgMail.setApiKey(process.env.API_KEY);
-var transporter = nodemailer.createTransport(sendgridTransport({
-  auth: {
-    api_key: process.env.API_KEY
-  }
-})); // * * * * * * * * * * GET LOGIN * * * * * * * * * * 
 
 exports.getLogin = function (req, res, next) {
   //set message
