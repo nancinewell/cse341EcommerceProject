@@ -2,7 +2,8 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
-
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.API_KEY);
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
       api_key: process.env.API_KEY

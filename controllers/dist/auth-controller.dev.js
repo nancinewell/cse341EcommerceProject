@@ -8,6 +8,9 @@ var nodemailer = require('nodemailer');
 
 var sendgridTransport = require('nodemailer-sendgrid-transport');
 
+var sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.API_KEY);
 var transporter = nodemailer.createTransport(sendgridTransport({
   auth: {
     api_key: process.env.API_KEY
