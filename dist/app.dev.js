@@ -20,6 +20,8 @@ var flash = require('connect-flash');
 
 var User = require('./models/user');
 
+require('dotenv').config();
+
 var MONGODB_URI = 'mongodb+srv://nodeuser:p1ngpong@cluster0.f2qqp.mongodb.net/project?retryWrites=true&w=majority';
 
 var cors = require('cors');
