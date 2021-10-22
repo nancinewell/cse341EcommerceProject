@@ -17,6 +17,8 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  resetToken: String,
+  resetExpiration: Date,
   cart: {
     items: [
       {
@@ -34,6 +36,30 @@ const userSchema = new Schema({
     totalPrice: {
         type: Number
     }
+  },
+  securityQuestion1: {
+    type: String,
+    required: true
+  },
+  securityQuestion2: {
+    type: String,
+    required: true
+  },
+  securityQuestion3: {
+    type: String,
+    required: true
+  },
+  securityAnswer1: {
+    type: String,
+    required: true
+  },
+  securityAnswer2: {
+    type: String,
+    required: true
+  },
+  securityAnswer3: {
+    type: String,
+    required: true
   }
 });
 

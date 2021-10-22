@@ -33,7 +33,10 @@ exports.getIndex = function (req, res, next) {
         path: '/'
       });
     })["catch"](function (err) {
-      return console.log("Error shop-controller 17: ".concat(err));
+      var error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('shop controller 21');
+      return next(error);
     });
   } else {
     Product.find().then(function (products) {
@@ -44,7 +47,10 @@ exports.getIndex = function (req, res, next) {
         user: req.user.name
       });
     })["catch"](function (err) {
-      return console.log("Error shop-controller 17: ".concat(err));
+      var error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('shop controller 37');
+      return next(error);
     });
   }
 }; // * * * * * * * * * * * * * * GET PRODUCT * * * * * * * * * * * * * *
@@ -62,7 +68,10 @@ exports.getProduct = function (req, res, next) {
       user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error shop-controller 35: ".concat(err));
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('shop controller 60');
+    return next(error);
   });
 }; // * * * * * * * * * * * * * * GET CHECKOUT * * * * * * * * * * * * * *
 
@@ -80,7 +89,10 @@ exports.getCheckout = function (req, res, next) {
       user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error shop-controller 57: ".concat(err));
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('shop controller 90');
+    return next(error);
   });
 }; // * * * * * * * * * * * * * * GET CART * * * * * * * * * * * * * *
 
@@ -98,7 +110,10 @@ exports.getCart = function (req, res, next) {
       user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error shop-controller 76: ".concat(err));
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('shop controller 114');
+    return next(error);
   });
 }; // * * * * * * * * * * * * * * POST CART * * * * * * * * * * * * * *
 
@@ -125,7 +140,10 @@ exports.postCartDeleteProduct = function (req, res, next) {
   req.user.removeFromCart(prodId, qty, price).then(function (result) {
     res.redirect('/cart');
   })["catch"](function (err) {
-    return console.log("Error shop-controller 109: ".concat(err));
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('shop controller 152');
+    return next(error);
   });
 }; // * * * * * * * * * * * * * * GET ORDERS * * * * * * * * * * * * * *
 
@@ -142,7 +160,10 @@ exports.getOrders = function (req, res, next) {
       user: req.user.name
     });
   })["catch"](function (err) {
-    return console.log("Error shop-controller 124: ".concat(err));
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('shop controller 172');
+    return next(error);
   });
 }; // * * * * * * * * * * * * * * POST ORDER * * * * * * * * * * * * * *
 
@@ -185,13 +206,22 @@ exports.postOrder = function (req, res, next) {
     //redirect to the orders page
     res.redirect('/orders');
   })["catch"](function (err) {
-    return console.log("Error shop-controller 168: ".concat(err));
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('shop controller 221');
+    return next(error);
   });
 }; // * * * * * * * * * * * * * * POST SEARCH * * * * * * * * * * * * * *
 
 
 exports.postSearch = function (req, res, next) {
   var search = req.body.search;
+  var user = null;
+
+  if (req.user) {
+    user = req.user.name;
+  }
+
   Product.find({
     "title": {
       $regex: '.*' + search + '.*',
@@ -202,7 +232,13 @@ exports.postSearch = function (req, res, next) {
       prods: products,
       pageTitle: 'Search Results',
       path: '/',
-      user: req.user.name
+      editing: false,
+      user: user
     });
+  })["catch"](function (err) {
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('shop controller 247');
+    return next(error);
   });
 };

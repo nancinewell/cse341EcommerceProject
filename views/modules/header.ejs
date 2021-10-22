@@ -2,9 +2,9 @@
     <div class="logo-search">
         <div class="logo">
             <a href="/"><img class="logo-img" src="<% if (path.includes('admin')){ %>
-                ../images/logo.png
+                ../../images/logo.png
                 <% } else { %>
-                    images/logo.png
+                    ../images/logo.png
                     <% } %>
                 "></a>
             <h1>Munchkin Madness</h1>
@@ -17,6 +17,7 @@
             <input type="checkbox" id="search-toggle">
             <form action="/search" method="post">
                 <input type="text" name="search" id="search">
+                <input type="hidden" value="<%= csrfToken %>" name="_csrf">
                 <button type="submit" class="btn">Search</button>
             </form>
         </div>
@@ -48,7 +49,6 @@
             <% } else { %>
                 <li class="welcome">Welcome <%= user %>!</li>
                 <li class="main-header__item logout-group">
-                    
                     <form action="/logout" method="post">
                         <input type="hidden" value="<%= csrfToken %>" name="_csrf">
                         <button class="logout-button" type="submit">Logout</button>

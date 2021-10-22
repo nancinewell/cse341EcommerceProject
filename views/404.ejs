@@ -4,7 +4,13 @@
 <%- include('modules/header.ejs'); %>
 <main class="error-main">
     <h1>Error!</h1>
-    <img class="error-img" src="images/zombie-munchkin-banner.png">
+    <img class="error-img" src="<% if (path.includes('admin')){ %>
+        ../../images/zombie-munchkin-banner.png
+        <% } else { %>
+            ../images/zombie-munchkin-banner.png
+            <% } %>">
+
+
     <h2>This is definitely not what you were looking for. Sorry!</h2>
 </main>
 <%- include('modules/footer.ejs'); %>

@@ -7,24 +7,58 @@
         <div class="user-message"><%= errorMessage %></div>
     <% } %>
     <form class="login-form" action="/signup" method="POST">
+        <fieldset>
+            <legend>Join Us!</legend>
         <div class="form-control">
             <label for="name">Name</label>
-            <input type="text" name="name" id="name">
+            <input type="text" name="name" id="name" value="<%= oldInput.name %>" class="<%= validationErrors.find(e => e.param === 'name') ? 'invalid' : ''  %>">
         </div>
         <div class="form-control">
             <label for="email">Email</label>
-            <input type="email" name="email" id="email">
+            <input type="email" name="email" id="email" value="<%= oldInput.email %>" class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : ''  %>">
         </div>
         <div class="form-control">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : ''  %>">
         </div>
         <div class="form-control">
             <label for="confirmPassword">Confirm Password</label>
-            <input type="password" name="confirmPassword" id="confirmPassword">
+            <input type="password" name="confirmPassword" id="confirmPassword" class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : ''  %>">
+        </div>
+        <div class="form-control-select">
+            <label for="securityQuestion1">Security Question 1</label>
+            <select name="securityQuestion1" id="securityQuestion1">
+                <option selected="true" disabled="disabled">Choose Question</option>
+                <option value="What city were you born in?">What city were you born in?</option>
+                <option value="What is your oldest sibling’s middle name?">What is your oldest sibling’s middle name?</option>
+                <option value="What was the first concert you attended?">What was the first concert you attended?</option>
+            </select>
+            <input type="text" name="securityAnswer1" id="securityAnswer1" value="<%= oldInput.securityAnswer1 %>" class="<%= validationErrors.find(e => e.param === 'securityAnswer1') ? 'invalid' : ''  %>">
+        </div>
+        <div class="form-control-select">
+            <label for="securityQuestion2">Security Question 2</label>
+            <select name="securityQuestion2" id="securityQuestion2">
+                <option selected="true" disabled="disabled">Choose Question</option>
+                <option value="What was the make and model of your first car?">What was the make and model of your first car?</option>
+                <option value="In what city or town did your parents meet?">In what city or town did your parents meet?</option>
+                <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+            </select>
+            <input type="text" name="securityAnswer2" id="securityAnswer2" value="<%= oldInput.securityAnswer2 %>" class="<%= validationErrors.find(e => e.param === 'securityAnswer2') ? 'invalid' : ''  %>">
+        </div>
+        <div class="form-control-select">
+            <label for="securityQuestion3">Security Question 3</label>
+            <select name="securityQuestion3" id="securityQuestion3">
+                <option selected="true" disabled="disabled">Choose Question</option>
+                <option value="What school did you attend for sixth grade?">What school did you attend for sixth grade?</option>
+                <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+                <option value="What is your oldest cousin’s first and last name?">What is your oldest cousin’s first and last name?
+                </option>
+            </select>
+            <input type="text" name="securityAnswer3" id="securityAnswer3" value="<%= oldInput.securityAnswer3 %>" class="<%= validationErrors.find(e => e.param === 'securityAnswer3') ? 'invalid' : ''  %>">
         </div>
         <input type="hidden" value="<%= csrfToken %>" name="_csrf">
-        <button class="btn" type="submit">Sign Up</button>
+        <button class="btn login-btn" type="submit">Sign Up</button>
+    </fieldset>
     </form>
 </main>
 <%- include('../modules/footer.ejs'); %>

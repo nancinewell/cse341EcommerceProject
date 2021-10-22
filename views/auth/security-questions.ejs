@@ -1,0 +1,33 @@
+<%- include('../modules/head.ejs'); %>
+</head>
+<body>
+<%- include('../modules/header.ejs'); %>
+<main>
+    <% if(errorMessage){ %>
+        <div class="user-message"><%= errorMessage %></div>
+    <% } %>
+    <form class="login-form" action="/security-questions" method="POST">
+        <fieldset>
+            <legend>Security Questions</legend>
+        <div class="form-control-select">
+            <label for="securityAnswer1"><%= securityQuestions[0] %></label>
+            <input type="text" name="securityAnswer1" id="securityAnswer1" value="<%= oldInput.securityAnswer1 %>" class="<%= validationErrors.find(e => e.param === 'securityAnswer1') ? 'invalid' : ''  %>">
+        </div>
+        <div class="form-control-select">
+            <label for="securityAnswer2"><%= securityQuestions[1] %></label>
+            <input type="test" name="securityAnswer2" id="securityAnswer2" value="<%= oldInput.securityAnswer2 %>" class="<%= validationErrors.find(e => e.param === 'securityAnswer2') ? 'invalid' : ''  %>">
+        </div>
+        <div class="form-control-select">
+            <label for="securityAnswer3"><%= securityQuestions[2] %></label>
+            <input type="text" name="securityAnswer3" id="securityAnswer3" class="<%= validationErrors.find(e => e.param === 'securityAnswer3') ? 'invalid' : ''  %>">
+        </div>
+        
+        <input type="hidden" value="<%= csrfToken %>" name="_csrf">
+        <input type="hidden" value="<%= email %>" name="email">
+        <button class="btn login-btn" type="submit">Submit</button>
+    </fieldset>
+    </form>
+</main>
+<%- include('../modules/footer.ejs'); %>
+ 
+    

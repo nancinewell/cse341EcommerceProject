@@ -7,6 +7,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const errorController = require('./controllers/error-controller');
 const User = require('./models/user');
 require('dotenv').config();
 
@@ -74,10 +75,12 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
-//error if no route/page found
-app.use((req, res, next) => {
-  res.status(404).render('404', { pageTitle: 'Page Not Found', path: '404' });
-});
+
+//Error handling
+app.use(errorController.get500);
+
+app.use(errorController.get404);
+
   
 //connection configuration 
 const config = {

@@ -3,18 +3,24 @@ const Order = require('../models/orders');
 
 // * * * * * * * * * * * * * * GET INDEX * * * * * * * * * * * * * *
 exports.getIndex = (req, res, next) => {
+  
   //get all products from db and render in index
   if(!req.user){
+    
     Product.find()
     .then(products => {
-      
       res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',
         path: '/'
       });
     })
-    .catch(err => console.log(`Error shop-controller 17: ${err}`));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('shop controller 21');
+      return next(error);
+    });
   } else {
   Product.find()
     .then(products => {
@@ -26,7 +32,13 @@ exports.getIndex = (req, res, next) => {
         user: req.user.name
       });
     })
-    .catch(err => console.log(`Error shop-controller 17: ${err}`));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('shop controller 37');
+      return next(error);
+    }
+    );
   }
 };
 
@@ -45,7 +57,12 @@ exports.getProduct = (req, res, next) => {
         user: req.user.name
       });
     })
-    .catch(err => console.log(`Error shop-controller 35: ${err}`));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('shop controller 60');
+      return next(error);
+    });
 };
     
 
@@ -67,7 +84,12 @@ exports.getCheckout = (req, res, next) => {
         user: req.user.name
       });
     })
-    .catch(err => console.log(`Error shop-controller 57: ${err}`));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('shop controller 90');
+      return next(error);
+    });
 };
 
 // * * * * * * * * * * * * * * GET CART * * * * * * * * * * * * * *
@@ -86,7 +108,12 @@ exports.getCart = (req, res, next) => {
         user: req.user.name
       });
     })
-    .catch(err => console.log(`Error shop-controller 76: ${err}`));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('shop controller 114');
+      return next(error);
+    });
 };
 
 // * * * * * * * * * * * * * * POST CART * * * * * * * * * * * * * *
@@ -119,7 +146,12 @@ exports.getCart = (req, res, next) => {
       .then(result => {
         res.redirect('/cart');
       })
-      .catch(err => console.log(`Error shop-controller 109: ${err}`));
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('shop controller 152');
+        return next(error);
+      });
   };
 
   // * * * * * * * * * * * * * * GET ORDERS * * * * * * * * * * * * * *
@@ -134,7 +166,12 @@ exports.getCart = (req, res, next) => {
           user: req.user.name
         });
       })
-      .catch(err => console.log(`Error shop-controller 124: ${err}`));
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('shop controller 172');
+        return next(error);
+      });
   };
 
 // * * * * * * * * * * * * * * POST ORDER * * * * * * * * * * * * * *
@@ -178,19 +215,39 @@ exports.getCart = (req, res, next) => {
         //redirect to the orders page
         res.redirect('/orders');
       })
-      .catch(err => console.log(`Error shop-controller 168: ${err}`));
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('shop controller 221');
+        return next(error);
+      });
   };
   
   // * * * * * * * * * * * * * * POST SEARCH * * * * * * * * * * * * * *
   exports.postSearch = (req, res, next) => {
     const search = req.body.search;
+    let user = null;
+    if(req.user){
+      user = req.user.name;
+    }
+
     Product.find({"title": { $regex: '.*'+search+'.*', $options: 'i' }})
     .then(products => {
         res.render('shop/index', {
         prods: products,
         pageTitle: 'Search Results',
         path: '/',
-        user: req.user.name
+        editing: false,
+        user: user
       });
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      console.log('shop controller 247');
+      return next(error);
     });
-  };
+  }
+  
+
+

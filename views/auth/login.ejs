@@ -11,17 +11,18 @@
                 <legend>Log In</legend>
                 <div class="form-control">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email">
+                    <input type="email" name="email" id="email" value="<%= oldInput.email %>" class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : ''  %>">
                 </div>
                 <div class="form-control">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password">
+                    <input type="password" name="password" id="password" class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : ''  %>">
                 </div>
                 <input type="hidden" value="<%= csrfToken %>" name="_csrf">
-                <button class="btn" type="submit">Log In</button>
-                
+                <button class="btn login-btn" type="submit">Log In</button>
+                <a href='/reset' class='forgot-password'>Forgot Password?</a>        
             </fieldset>
         </form>
+        
 </main>
 <%- include('../modules/footer.ejs'); %>
  

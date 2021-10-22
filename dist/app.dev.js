@@ -18,6 +18,8 @@ var csrf = require('csurf');
 
 var flash = require('connect-flash');
 
+var errorController = require('./controllers/error-controller');
+
 var User = require('./models/user');
 
 require('dotenv').config();
@@ -85,14 +87,10 @@ app.use(function (req, res, next) {
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
-app.use(authRoutes); //error if no route/page found
+app.use(authRoutes); //Error handling
 
-app.use(function (req, res, next) {
-  res.status(404).render('404', {
-    pageTitle: 'Page Not Found',
-    path: '404'
-  });
-}); //connection configuration 
+app.use(errorController.get500);
+app.use(errorController.get404); //connection configuration 
 
 var config = {
   autoIndex: false,

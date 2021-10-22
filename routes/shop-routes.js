@@ -22,7 +22,7 @@ router.get('/checkout', isAuth, shopController.getCheckout);
 
 router.get('/products/:productId', isAuth, shopController.getProduct);
 
-router.post('/search/', isAuth, shopController.postSearch);
+router.post('/search', shopController.postSearch);
 
 router.get('/', shopController.getIndex);
 
