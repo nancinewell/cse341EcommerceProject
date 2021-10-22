@@ -246,8 +246,11 @@ exports.postAddAnotherProduct = (req, res, next) => {
       })
       
       .catch(err => {
-        res.redirect('/admin/edit-product/:prodId');
-        console.log('admin-controller 162');
+        //res.redirect('/admin/edit-product/:prodId');
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('admin-controller 253');
+        return next(error);
       });
 };
 
@@ -262,8 +265,12 @@ exports.postAddAnotherProduct = (req, res, next) => {
         res.redirect('/admin/products');
       })
       .catch(err => {
-        res.redirect('/');
-        console.log('admin-controller 178');
+        // res.redirect('/');
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        console.log('admin-controller 131');
+        return next(error);
+        
       });
   };
   

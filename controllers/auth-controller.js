@@ -98,6 +98,12 @@ exports.postLogin = (req, res, next) => {
                 })
 
         })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            console.log('admin-controller 20');
+            return next(error);
+          });
     }
 
 // * * * * * * * * * * POST LOGOUT * * * * * * * * * * 
@@ -186,7 +192,6 @@ exports.postSignup = (req, res, next) => {
                         return user.save();
                     })
                     .then(result => {
-
                         res.render('auth/login', {
                             path: '/login',
                             pageTitle: 'Log In',
@@ -216,48 +221,16 @@ exports.postSignup = (req, res, next) => {
             .catch( err => {
                 const error = new Error(err);
                     error.httpStatusCode = 500;
-                    console.log(`auth-controller 212: ${err}`);
+                    console.log(`auth-controller 224: ${err}`);
                     return next(error);
             })
         })
-        .catch()
-
-    // bcrypt.hash(password, 12)
-    //     //then create a new user with the hashed password
-    //     .then(hashedPassword => {
-    //         const user = new User({
-    //             name: name,
-    //             email: email,
-    //             password: hashedPassword,
-    //             cart: {items: []}
-    //         });
-    //         //save the new user
-    //         return user.save();
-    //     })
-    //     //then redirect to login and send confirmation email
-    //     .then(result => {
-    //         res.redirect('/login');
-    //         console.log("Thanks for Signing Up!")
-    //         // return transporter.sendMail({
-    //         //     to:email,
-    //         //     from: 'nanci.newell@gmail.com',
-    //         //     subject: 'Thanks for Signing Up!',
-    //         //     html: "<h1>You've successfully signed up for Munchkin Madness!</h1><p>We're so happy to find another kindred spirit ready to take down their friends with silliness and adventure!</p>"
-    //         // }, function(err, info){
-    //         //     //log any errors or sucesses
-    //         //     if(err){
-    //         //         console.log(`Error auth-controller 145: ${err}`);
-    //         //     } else {
-    //         //         console.log(`Message sent: ${info}`);
-    //         //     }
-    //         // });
-    //     })
-    //     .catch(err => {
-    //         const error = new Error(err);
-    //         error.httpStatusCode = 500;
-    //         console.log('auth-controller 278');
-    //         return next(error);
-    //     });    
+        .catch( err => {
+            const error = new Error(err);
+                error.httpStatusCode = 500;
+                console.log(`auth-controller 231: ${err}`);
+                return next(error);
+        })
 };
 
 
@@ -279,36 +252,24 @@ exports.getReset = (req, res, next) => {
 
 exports.postReset = (req, res, next) => {
     const errors = validationResult(req);
-    // crypto.randomBytes(32, (err, buffer) => {
-    //     if(err){
-    //         return res.redirect('/reset');
-    //     }
-    //     const token = buffer.toString('hex');
         User.findOne({email: req.body.email})
         .then(user => {
             if(!user){
                 req.flash('message', "Sorry, no account found.");
                 return res.redirect('/reset');
             }
-            // user.resetToken = token;
-            // user.resetExpiration = Date.now() + 3600000;
-            // user.save()
-            //  .then(result => {
-   
-                const securityQuestions=[user.securityQuestion1, user.securityQuestion2, user.securityQuestion3];
-    
-                res.render('auth/security-questions', {
-                    path: '/security-questions',
-                    pageTitle: 'Security Questions',
-                    isAuthenticated: false,
-                    errorMessage: "",
-                    securityQuestions: securityQuestions,
-                    oldInput: {securityAnswer1: "", securityAnswer2: "", securityAnswer3: ""},
-                    validationErrors: errors.array(),
-                    email: req.body.email
-                })
-    
-            
+            const securityQuestions=[user.securityQuestion1, user.securityQuestion2, user.securityQuestion3];
+
+            res.render('auth/security-questions', {
+                path: '/security-questions',
+                pageTitle: 'Security Questions',
+                isAuthenticated: false,
+                errorMessage: "",
+                securityQuestions: securityQuestions,
+                oldInput: {securityAnswer1: "", securityAnswer2: "", securityAnswer3: ""},
+                validationErrors: errors.array(),
+                email: req.body.email
+            })
         })
         .catch(err => {
             const error = new Error(err);
@@ -324,6 +285,7 @@ exports.postSecurityQuestions = (req, res, next) => {
     const securityAnswer2 = req.body.securityAnswer2;
     const securityAnswer3 = req.body.securityAnswer3;
 
+    let thisUser;
     crypto.randomBytes(32, (err, buffer) => {
         if(err){
             return res.redirect('/reset');
@@ -335,22 +297,73 @@ exports.postSecurityQuestions = (req, res, next) => {
                 req.flash('message', "Sorry, no account found.");
                 return res.redirect('/reset');
             }
-            user.resetToken = token;
-            user.resetExpiration = Date.now() + 3600000;
-            user.save()
-                .then(result => {
-                    return res.redirect(`/reset/${token}`);
+            thisUser = user;
+            bcrypt.compare(securityAnswer1, thisUser.securityAnswer1)
+                .then(theyMatch => {
+                    //if they match, then check the next answer
+                    if(theyMatch){
+                        bcrypt.compare(securityAnswer2, thisUser.securityAnswer2)
+                            .then(theyMatch => {
+                                //if they match, then check the next answer
+                                if(theyMatch){
+                                    bcrypt.compare(securityAnswer3, thisUser.securityAnswer3)
+                                        .then(theyMatch => {
+                                            //if they match, then check the next answer
+                                            if(theyMatch){
+                                                thisUser.resetToken = token;
+                                                thisUser.resetExpiration = Date.now() + 3600000;
+                                                thisUser.save()
+                                                    .then(result => {
+                                                        return res.redirect(`/reset/${token}`);
+                                                    })
+                                            } else {
+                                                //If they don't match, then send back to login page with error message.
+                                                console.log("* * * * * * * auth-controller 324 * * * * * * * ");
+                                                res.status(422).render('auth/login', {
+                                                    path: '/login',
+                                                    pageTitle: 'Log In',
+                                                    isAuthenticated: false,
+                                                    errorMessage: "Invalid answer(s) to security questions.",
+                                                    oldInput: {email: email},
+                                                    validationErrors: []
+                                                    });
+                                            }
+                                            
+                                        })
+                                } else {
+                                    //If they don't match, then send back to login page with error message.
+                                    res.status(422).render('auth/login', {
+                                        path: '/login',
+                                        pageTitle: 'Log In',
+                                        isAuthenticated: false,
+                                        errorMessage: "Invalid answer(s) to security questions.",
+                                        oldInput: {email: email},
+                                        validationErrors: []
+                                        });
+                                }
+                                
+                            })
+                    } else {
+                        //If they don't match, then send back to login page with error message.
+                        res.status(422).render('auth/login', {
+                            path: '/login',
+                            pageTitle: 'Log In',
+                            isAuthenticated: false,
+                            errorMessage: "Invalid answer(s) to security questions.",
+                            oldInput: {email: email},
+                            validationErrors: []
+                            });
+                    }
+                    
                 })
-        })
+            })  
     })
 }
 
 exports.getNewPassword = (req, res, next) => {
     const token = req.params.token;
-    console.log(`auth controller 234 token: ${token}`);
     User.findOne({resetToken: token, resetExpiration: {$gt: Date.now()}})
         .then(user => {
-            console.log(`auth controller 237 user: ${user}`);
             let message = req.flash('message');
                 if(message.length > 0){
                     message = message[0];

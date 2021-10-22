@@ -143,6 +143,11 @@ exports.postLogin = function (req, res, next) {
       console.log("Error auth-controller 95: ".concat(err));
       res.redirect('/login');
     });
+  })["catch"](function (err) {
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log('admin-controller 20');
+    return next(error);
   });
 }; // * * * * * * * * * * POST LOGOUT * * * * * * * * * * 
 
@@ -267,45 +272,15 @@ exports.postSignup = function (req, res, next) {
     })["catch"](function (err) {
       var error = new Error(err);
       error.httpStatusCode = 500;
-      console.log("auth-controller 212: ".concat(err));
+      console.log("auth-controller 224: ".concat(err));
       return next(error);
     });
-  })["catch"](); // bcrypt.hash(password, 12)
-  //     //then create a new user with the hashed password
-  //     .then(hashedPassword => {
-  //         const user = new User({
-  //             name: name,
-  //             email: email,
-  //             password: hashedPassword,
-  //             cart: {items: []}
-  //         });
-  //         //save the new user
-  //         return user.save();
-  //     })
-  //     //then redirect to login and send confirmation email
-  //     .then(result => {
-  //         res.redirect('/login');
-  //         console.log("Thanks for Signing Up!")
-  //         // return transporter.sendMail({
-  //         //     to:email,
-  //         //     from: 'nanci.newell@gmail.com',
-  //         //     subject: 'Thanks for Signing Up!',
-  //         //     html: "<h1>You've successfully signed up for Munchkin Madness!</h1><p>We're so happy to find another kindred spirit ready to take down their friends with silliness and adventure!</p>"
-  //         // }, function(err, info){
-  //         //     //log any errors or sucesses
-  //         //     if(err){
-  //         //         console.log(`Error auth-controller 145: ${err}`);
-  //         //     } else {
-  //         //         console.log(`Message sent: ${info}`);
-  //         //     }
-  //         // });
-  //     })
-  //     .catch(err => {
-  //         const error = new Error(err);
-  //         error.httpStatusCode = 500;
-  //         console.log('auth-controller 278');
-  //         return next(error);
-  //     });    
+  })["catch"](function (err) {
+    var error = new Error(err);
+    error.httpStatusCode = 500;
+    console.log("auth-controller 231: ".concat(err));
+    return next(error);
+  });
 };
 
 exports.getReset = function (req, res, next) {
@@ -326,23 +301,14 @@ exports.getReset = function (req, res, next) {
 };
 
 exports.postReset = function (req, res, next) {
-  var errors = validationResult(req); // crypto.randomBytes(32, (err, buffer) => {
-  //     if(err){
-  //         return res.redirect('/reset');
-  //     }
-  //     const token = buffer.toString('hex');
-
+  var errors = validationResult(req);
   User.findOne({
     email: req.body.email
   }).then(function (user) {
     if (!user) {
       req.flash('message', "Sorry, no account found.");
       return res.redirect('/reset');
-    } // user.resetToken = token;
-    // user.resetExpiration = Date.now() + 3600000;
-    // user.save()
-    //  .then(result => {
-
+    }
 
     var securityQuestions = [user.securityQuestion1, user.securityQuestion2, user.securityQuestion3];
     res.render('auth/security-questions', {
@@ -372,6 +338,7 @@ exports.postSecurityQuestions = function (req, res, next) {
   var securityAnswer1 = req.body.securityAnswer1;
   var securityAnswer2 = req.body.securityAnswer2;
   var securityAnswer3 = req.body.securityAnswer3;
+  var thisUser;
   crypto.randomBytes(32, function (err, buffer) {
     if (err) {
       return res.redirect('/reset');
@@ -386,10 +353,63 @@ exports.postSecurityQuestions = function (req, res, next) {
         return res.redirect('/reset');
       }
 
-      user.resetToken = token;
-      user.resetExpiration = Date.now() + 3600000;
-      user.save().then(function (result) {
-        return res.redirect("/reset/".concat(token));
+      thisUser = user;
+      bcrypt.compare(securityAnswer1, thisUser.securityAnswer1).then(function (theyMatch) {
+        //if they match, then check the next answer
+        if (theyMatch) {
+          bcrypt.compare(securityAnswer2, thisUser.securityAnswer2).then(function (theyMatch) {
+            //if they match, then check the next answer
+            if (theyMatch) {
+              bcrypt.compare(securityAnswer3, thisUser.securityAnswer3).then(function (theyMatch) {
+                //if they match, then check the next answer
+                if (theyMatch) {
+                  thisUser.resetToken = token;
+                  thisUser.resetExpiration = Date.now() + 3600000;
+                  thisUser.save().then(function (result) {
+                    return res.redirect("/reset/".concat(token));
+                  });
+                } else {
+                  //If they don't match, then send back to login page with error message.
+                  console.log("* * * * * * * auth-controller 324 * * * * * * * ");
+                  res.status(422).render('auth/login', {
+                    path: '/login',
+                    pageTitle: 'Log In',
+                    isAuthenticated: false,
+                    errorMessage: "Invalid answer(s) to security questions.",
+                    oldInput: {
+                      email: email
+                    },
+                    validationErrors: []
+                  });
+                }
+              });
+            } else {
+              //If they don't match, then send back to login page with error message.
+              res.status(422).render('auth/login', {
+                path: '/login',
+                pageTitle: 'Log In',
+                isAuthenticated: false,
+                errorMessage: "Invalid answer(s) to security questions.",
+                oldInput: {
+                  email: email
+                },
+                validationErrors: []
+              });
+            }
+          });
+        } else {
+          //If they don't match, then send back to login page with error message.
+          res.status(422).render('auth/login', {
+            path: '/login',
+            pageTitle: 'Log In',
+            isAuthenticated: false,
+            errorMessage: "Invalid answer(s) to security questions.",
+            oldInput: {
+              email: email
+            },
+            validationErrors: []
+          });
+        }
       });
     });
   });
@@ -397,14 +417,12 @@ exports.postSecurityQuestions = function (req, res, next) {
 
 exports.getNewPassword = function (req, res, next) {
   var token = req.params.token;
-  console.log("auth controller 234 token: ".concat(token));
   User.findOne({
     resetToken: token,
     resetExpiration: {
       $gt: Date.now()
     }
   }).then(function (user) {
-    console.log("auth controller 237 user: ".concat(user));
     var message = req.flash('message');
 
     if (message.length > 0) {
