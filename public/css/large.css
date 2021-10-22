@@ -20,7 +20,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-areas: 'nav login';
-        justify-items: space-between;
+        justify-items: start;
         width: 100vw;
     }
 
@@ -93,7 +93,7 @@
         width: 100%;
         height: 100%;
         display: grid;
-        grid-template-areas: form;
+        grid-template-areas: 'form';
     }
 
     .search-bar form{

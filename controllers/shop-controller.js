@@ -12,7 +12,6 @@ exports.getIndex = (req, res, next) => {
         pageTitle: 'Shop',
         path: '/'
       });
-      console.log("shop-controller 15");
     })
     .catch(err => {
       const error = new Error(err);
@@ -22,9 +21,7 @@ exports.getIndex = (req, res, next) => {
     });
   } else {
   Product.find()
-  console.log("shop-controller 27")
     .then(products => {
-      console.log("shop-controller 29");
       res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',
