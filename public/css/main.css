@@ -422,10 +422,11 @@ legend{
     justify-self: center;
 }
 
-.card__header p{
+.card__header h2{
     margin: 0;
     font-weight: 700;
     color: #fff;
+    font-size: 1.25rem;
     font-family: 'Koh Santepheap', cursive;
 }
 .card__image img{
