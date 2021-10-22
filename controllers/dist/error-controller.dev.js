@@ -1,5 +1,17 @@
 "use strict";
 
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["error: ", ""]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
 exports.get404 = function (req, res, next) {
   var user = null;
 
@@ -16,6 +28,7 @@ exports.get404 = function (req, res, next) {
 };
 
 exports.get500 = function (error, req, res, next) {
+  console.log(_templateObject(), error);
   var user = null;
 
   if (req.session.isLoggedIn) {

@@ -3,10 +3,8 @@ const Order = require('../models/orders');
 
 // * * * * * * * * * * * * * * GET INDEX * * * * * * * * * * * * * *
 exports.getIndex = (req, res, next) => {
-  
   //get all products from db and render in index
   if(!req.user){
-    
     Product.find()
     .then(products => {
       res.render('shop/index', {
@@ -14,6 +12,7 @@ exports.getIndex = (req, res, next) => {
         pageTitle: 'Shop',
         path: '/'
       });
+      console.log("shop-controller 15");
     })
     .catch(err => {
       const error = new Error(err);
@@ -23,8 +22,9 @@ exports.getIndex = (req, res, next) => {
     });
   } else {
   Product.find()
+  console.log("shop-controller 27")
     .then(products => {
-      
+      console.log("shop-controller 29");
       res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',

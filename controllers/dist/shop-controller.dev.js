@@ -32,6 +32,7 @@ exports.getIndex = function (req, res, next) {
         pageTitle: 'Shop',
         path: '/'
       });
+      console.log("shop-controller 15");
     })["catch"](function (err) {
       var error = new Error(err);
       error.httpStatusCode = 500;
@@ -39,7 +40,9 @@ exports.getIndex = function (req, res, next) {
       return next(error);
     });
   } else {
-    Product.find().then(function (products) {
+    Product.find();
+    console.log("shop-controller 27").then(function (products) {
+      console.log("shop-controller 29");
       res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',

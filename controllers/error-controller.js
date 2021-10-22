@@ -11,7 +11,7 @@ exports.get404 = (req, res, next) => {
 };
   
 exports.get500 = (error, req, res, next) => {
-
+  console.log`error: ${error}`;
   let user = null;
   if(req.session.isLoggedIn){
     user = req.user.name;
