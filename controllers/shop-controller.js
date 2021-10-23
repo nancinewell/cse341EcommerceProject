@@ -9,7 +9,7 @@ exports.getIndex = (req, res, next) => {
     .then(products => {
       res.render('shop/index', {
         prods: products,
-        pageTitle: 'Shop',
+        pageTitle: 'Munchkin Madness',
         path: '/'
       });
     })
@@ -24,7 +24,7 @@ exports.getIndex = (req, res, next) => {
     .then(products => {
       res.render('shop/index', {
         prods: products,
-        pageTitle: 'Shop',
+        pageTitle: 'Munchkin Madness',
         path: '/',
         user: req.user.name
       });

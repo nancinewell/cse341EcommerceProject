@@ -29,7 +29,7 @@ exports.getIndex = function (req, res, next) {
     Product.find().then(function (products) {
       res.render('shop/index', {
         prods: products,
-        pageTitle: 'Shop',
+        pageTitle: 'Munchkin Madness',
         path: '/'
       });
     })["catch"](function (err) {
@@ -42,7 +42,7 @@ exports.getIndex = function (req, res, next) {
     Product.find().then(function (products) {
       res.render('shop/index', {
         prods: products,
-        pageTitle: 'Shop',
+        pageTitle: 'Munchkin Madness',
         path: '/',
         user: req.user.name
       });
